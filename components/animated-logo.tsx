@@ -7,27 +7,35 @@ interface AnimatedLogoProps {
   className?: string
   size?: "sm" | "md" | "lg"
   animated?: boolean
+  splashMode?: boolean
 }
 
-export default function AnimatedLogo({ className = "", size = "md", animated = true }: AnimatedLogoProps) {
+export default function AnimatedLogo({
+  className = "",
+  size = "md",
+  animated = true,
+  splashMode = false,
+}: AnimatedLogoProps) {
   const [isVisible, setIsVisible] = useState(false)
   const [isAnimating, setIsAnimating] = useState(true) // Always animate
 
   useEffect(() => {
     setIsVisible(true)
 
-    // Set up continuous animation cycle
-    const animationInterval = setInterval(() => {
-      setIsAnimating(false)
+    if (!splashMode) {
+      // Set up continuous animation cycle for normal mode
+      const animationInterval = setInterval(() => {
+        setIsAnimating(false)
 
-      // Small delay before starting animation again
-      setTimeout(() => {
-        setIsAnimating(true)
-      }, 100)
-    }, 4000) // Cycle every 4 seconds
+        // Small delay before starting animation again
+        setTimeout(() => {
+          setIsAnimating(true)
+        }, 100)
+      }, 4000) // Cycle every 4 seconds
 
-    return () => clearInterval(animationInterval)
-  }, [])
+      return () => clearInterval(animationInterval)
+    }
+  }, [splashMode])
 
   const sizeMap = {
     sm: { width: 32, height: 32 },
@@ -55,7 +63,7 @@ export default function AnimatedLogo({ className = "", size = "md", animated = t
                   left: `${i * 16}%`,
                   height: isAnimating ? "100%" : "90%",
                   opacity: isAnimating ? 1 : 0.8,
-                  transitionDelay: `${i * 0.05}s`,
+                  transitionDelay: splashMode ? `${i * 0.1}s` : `${i * 0.05}s`,
                 }}
               ></div>
             ))}

@@ -37,7 +37,7 @@ export default function WhatIs() {
   return (
     <div ref={sectionRef} className="w-full">
       {/* Only blue bars that animate on scroll */}
-      <VerticalBarsBackground count={15} opacity={0.08} scrollAnimate={true} />
+      <VerticalBarsBackground count={15} opacity={0.08} scrollAnimate={false} />
 
       <div className="container mx-auto relative z-10">
         <RefinedTextReveal>

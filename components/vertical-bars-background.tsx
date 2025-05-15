@@ -1,5 +1,8 @@
 "use client"
 
+// Vamos simplificar este componente para evitar animações contínuas baseadas em scroll
+// e fazer as barras surgirem de baixo para cima e depois ficarem estáticas
+
 import { useEffect, useState, useRef } from "react"
 
 interface VerticalBarsBackgroundProps {
@@ -15,13 +18,10 @@ export default function VerticalBarsBackground({
   className = "",
   opacity = 0.08,
   color = "blue",
-  scrollAnimate = true,
+  scrollAnimate = false, // Mudamos o padrão para false
 }: VerticalBarsBackgroundProps) {
   const [isVisible, setIsVisible] = useState(false)
-  const [scrollProgress, setScrollProgress] = useState(0)
   const containerRef = useRef<HTMLDivElement>(null)
-  const requestRef = useRef<number>()
-  const previousScrollY = useRef<number>(0)
 
   // Define color gradients based on the color prop
   const colorGradients = {
@@ -30,36 +30,11 @@ export default function VerticalBarsBackground({
     white: "from-white to-blue-50",
   }
 
-  // Smooth scroll animation using requestAnimationFrame
-  const animate = () => {
-    if (!containerRef.current || !scrollAnimate) return
-
-    const rect = containerRef.current.getBoundingClientRect()
-    const windowHeight = window.innerHeight
-
-    // Calculate how far the element is through the viewport
-    // 0 = just entered, 1 = just left
-    let targetProgress = 0
-    if (rect.top <= windowHeight && rect.bottom >= 0) {
-      targetProgress = (windowHeight - rect.top) / (windowHeight + rect.height)
-      targetProgress = Math.min(Math.max(targetProgress, 0), 1)
-    }
-
-    // Smooth the progress value
-    setScrollProgress((prev) => {
-      const delta = targetProgress - prev
-      return prev + delta * 0.1 // Adjust this value for smoother/faster transitions
-    })
-
-    requestRef.current = requestAnimationFrame(animate)
-  }
-
-  // Check if element is in viewport and handle scroll
+  // Simplificamos para apenas verificar se o elemento está visível
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
-        const isIntersecting = entries[0].isIntersecting
-        if (isIntersecting && !isVisible) {
+        if (entries[0].isIntersecting && !isVisible) {
           setIsVisible(true)
         }
       },
@@ -70,20 +45,12 @@ export default function VerticalBarsBackground({
       observer.observe(containerRef.current)
     }
 
-    // Start animation loop
-    if (scrollAnimate) {
-      requestRef.current = requestAnimationFrame(animate)
-    }
-
     return () => {
       if (containerRef.current) {
         observer.unobserve(containerRef.current)
       }
-      if (requestRef.current) {
-        cancelAnimationFrame(requestRef.current)
-      }
     }
-  }, [isVisible, scrollAnimate])
+  }, [isVisible])
 
   return (
     <div
@@ -100,10 +67,11 @@ export default function VerticalBarsBackground({
               left: `${(i * 100) / count}%`,
               width: `${80 / count}%`,
               opacity: opacity,
-              height: scrollAnimate ? `${Math.min(100, scrollProgress * 150)}%` : "100%",
-              transform: scrollAnimate ? `translateY(${Math.max(0, (1 - scrollProgress) * 30)}%)` : "none",
+              height: isVisible ? "100%" : "0%",
+              transform: isVisible ? "translateY(0)" : "translateY(100%)",
               transition:
-                "height 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1), opacity 1s ease-out",
+                "height 1.2s cubic-bezier(0.16, 1, 0.3, 1), transform 1.2s cubic-bezier(0.16, 1, 0.3, 1), opacity 1s ease-out",
+              transitionDelay: `${i * 0.05}s`,
             }}
           ></div>
         ))}

@@ -108,41 +108,29 @@ export const BackgroundProvider = ({ children }: { children: ReactNode }) => {
     // Store the last section for smooth transitions
     lastSectionRef.current = currentSection
 
-    // Update section with a small delay to prevent rapid changes
-    transitionTimeoutRef.current = setTimeout(() => {
-      setCurrentSection(section)
+    // Update section immediately but with a small delay for state updates
+    setCurrentSection(section)
 
-      // Clear transitioning state after animation completes
-      setTimeout(() => {
-        setIsTransitioning(false)
-      }, 1000)
-    }, 50)
+    // Clear transitioning state after animation completes
+    transitionTimeoutRef.current = setTimeout(() => {
+      setIsTransitioning(false)
+    }, 800) // Reduced from 1000ms to 800ms for faster response
   }
 
   useEffect(() => {
     // Update background color when section changes with smooth transition
     const colors = sectionColors[currentSection] || sectionColors.default
 
-    // Cancel any existing animation frame
-    if (animationFrameRef.current) {
-      cancelAnimationFrame(animationFrameRef.current)
-    }
-
-    // Use requestAnimationFrame for smoother transitions
-    animationFrameRef.current = requestAnimationFrame(() => {
-      setBackgroundColor(colors.background)
-      setTextColor(colors.textColor)
-      setGlassIntensity(colors.glassIntensity)
-      setAccentColor(colors.accentColor)
-    })
+    // Simplify the color updates - remove requestAnimationFrame for more direct updates
+    setBackgroundColor(colors.background)
+    setTextColor(colors.textColor)
+    setGlassIntensity(colors.glassIntensity)
+    setAccentColor(colors.accentColor)
 
     // Clean up on unmount
     return () => {
       if (transitionTimeoutRef.current) {
         clearTimeout(transitionTimeoutRef.current)
-      }
-      if (animationFrameRef.current) {
-        cancelAnimationFrame(animationFrameRef.current)
       }
     }
   }, [currentSection])
@@ -160,11 +148,9 @@ export const BackgroundProvider = ({ children }: { children: ReactNode }) => {
       }}
     >
       <div
-        className={`transition-colors duration-1500 ease-out ${backgroundColor} ${textColor}`}
+        className={`transition-colors duration-1000 ease-out ${backgroundColor} ${textColor}`}
         style={{
-          willChange: "background-color, color",
-          WebkitBackfaceVisibility: "hidden",
-          backfaceVisibility: "hidden",
+          willChange: "background-color",
         }}
       >
         {children}

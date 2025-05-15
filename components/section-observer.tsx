@@ -30,31 +30,24 @@ export default function SectionObserver({
     const isMobile = window.innerWidth < 768
 
     // Different thresholds for mobile and desktop
-    const effectiveThreshold = isMobile ? 0.15 : threshold
+    const effectiveThreshold = isMobile ? 0.1 : threshold
 
+    // Simplify the observer logic
     observerRef.current = new IntersectionObserver(
       (entries) => {
-        entries.forEach((entry) => {
-          // Set local state for component visibility
-          setIsInView(entry.isIntersecting)
+        const entry = entries[0]
 
-          // Only trigger section change when actually entering the viewport
-          // and when we haven't already triggered for this intersection
-          if (entry.isIntersecting && !hasIntersected.current) {
-            // Use requestAnimationFrame for smoother transitions
-            requestAnimationFrame(() => {
-              setCurrentSection(sectionId)
-            })
-            hasIntersected.current = true
-          } else if (!entry.isIntersecting) {
-            // Reset when section is out of view
-            hasIntersected.current = false
-          }
-        })
+        // Set local state for component visibility
+        setIsInView(entry.isIntersecting)
+
+        // Only trigger section change when actually entering the viewport
+        if (entry.isIntersecting) {
+          setCurrentSection(sectionId)
+        }
       },
       {
         threshold: effectiveThreshold,
-        rootMargin: isMobile ? "-40px 0px 0px 0px" : rootMargin, // Adjusted for mobile
+        rootMargin: isMobile ? "-20px 0px 0px 0px" : rootMargin, // Adjusted for mobile
       },
     )
 
