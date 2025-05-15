@@ -1,0 +1,239 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  /* Colors */
+  --color-primary: #00aabc;
+  --color-primary-dark: #008b9a;
+  --color-primary-light: #b3ecf3;
+  --color-primary-subtle: rgba(0, 170, 188, 0.08);
+
+  --color-secondary: #1a365d;
+  --color-secondary-dark: #0e2748;
+  --color-secondary-light: #cedaeb;
+
+  --color-text-dark: #0a1f3a;
+  --color-text-medium: #466082;
+  --color-text-light: #8596ad;
+
+  --color-background: #ffffff;
+  --color-background-light: #f7fafd;
+  --color-background-medium: #edf2f7;
+
+  /* Animations */
+  --transition-timing-premium: cubic-bezier(0.25, 0.1, 0.25, 1);
+}
+
+@layer base {
+  body {
+    @apply text-gray-700 bg-white;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    @apply text-gray-900 font-bold;
+  }
+}
+
+@layer components {
+  .container {
+    @apply px-4 mx-auto;
+    max-width: 1280px;
+  }
+
+  .premium-3d-effect {
+    transform-style: preserve-3d;
+    perspective: 1000px;
+  }
+}
+
+@layer utilities {
+  .animate-title-fade-in {
+    opacity: 0;
+    transform: translateY(5px);
+    animation: titleFadeIn 1.2s var(--transition-timing-premium) forwards;
+  }
+
+  .animate-subtitle-fade-in {
+    opacity: 0;
+    transform: translateY(5px);
+    animation: subtitleFadeIn 1.2s var(--transition-timing-premium) 0.2s forwards;
+  }
+
+  .animate-actions-fade-in {
+    opacity: 0;
+    transform: translateY(5px);
+    animation: actionsFadeIn 1.2s var(--transition-timing-premium) 0.4s forwards;
+  }
+
+  .animate-subtle-wave {
+    animation: subtleWave 30s ease-in-out infinite alternate;
+  }
+
+  .audience-card:hover .audience-card-line {
+    width: 100%;
+  }
+
+  .card-entrance {
+    opacity: 0;
+    transform: translateY(20px) scale(0.98);
+    transition: opacity 0.8s var(--transition-timing-premium), transform 0.8s var(--transition-timing-premium);
+  }
+
+  .card-entrance.revealed {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes titleFadeIn {
+  0% {
+    opacity: 0;
+    transform: translateY(5px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes subtitleFadeIn {
+  0% {
+    opacity: 0;
+    transform: translateY(5px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes actionsFadeIn {
+  0% {
+    opacity: 0;
+    transform: translateY(5px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes subtleWave {
+  0% {
+    transform: scale(1) skewX(0deg);
+    opacity: 0.75;
+  }
+  50% {
+    transform: scale(1.02) skewX(0.5deg);
+    opacity: 0.85;
+  }
+  100% {
+    transform: scale(1) skewX(0deg);
+    opacity: 0.75;
+  }
+}
+
+@keyframes subtleFloat {
+  0% {
+    transform: translate(0, 0);
+  }
+  50% {
+    transform: translate(10px, -8px);
+  }
+  100% {
+    transform: translate(-5px, 5px);
+  }
+}
+
+/* Scroll-based animations */
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 80px; /* Offset for fixed header */
+}
+
+/* Smooth section transitions */
+section {
+  transition: background-color 1s ease-out;
+}
+
+/* Parallax effect for background elements */
+.bg-parallax {
+  will-change: transform;
+  transition: transform 0.1s ease-out;
+}
+
+/* Hover effects for interactive elements */
+.interactive-element {
+  transition: all 0.3s var(--transition-timing-premium);
+}
+
+.interactive-element:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px -5px rgba(0, 0, 0, 0.08), 0 8px 8px -5px rgba(0, 0, 0, 0.03);
+}
+
+/* Micro-interactions for buttons */
+button {
+  transition: all 0.3s var(--transition-timing-premium);
+}
+
+button:active {
+  transform: scale(0.99);
+}
+
+/* Elegant section transitions */
+section {
+  position: relative;
+  z-index: 1;
+}
+
+section::after {
+  content: "";
+  position: absolute;
+  bottom: -1px;
+  left: 0;
+  width: 100%;
+  height: 70px;
+  background: linear-gradient(to bottom, transparent, var(--color-background));
+  z-index: -1;
+  pointer-events: none;
+  opacity: 0.5;
+}
+
+/* Navigation link hover effect */
+.nav-link {
+  position: relative;
+  transition: color 0.3s ease;
+}
+
+.nav-link::after {
+  content: "";
+  position: absolute;
+  width: 0;
+  height: 2px;
+  bottom: 0;
+  left: 0;
+  background: linear-gradient(to right, var(--color-primary), var(--color-primary-light));
+  transition: width 0.3s ease;
+}
+
+.nav-link:hover::after,
+.nav-link.active::after {
+  width: 100%;
+}
+
+/* Smooth scrolling for anchor links */
+a[href^="#"] {
+  scroll-behavior: smooth;
+}
+
+/* Section background transitions */
+.section-transition {
+  transition: background-color 1s ease-out;
+}
