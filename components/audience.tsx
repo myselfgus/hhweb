@@ -5,6 +5,9 @@ import Image from "next/image"
 import ElegantReveal from "./animations/elegant-reveal"
 import RefinedTextReveal from "./animations/refined-text-reveal"
 import RefinedParallax from "./animations/refined-parallax"
+import AnimatedSphere from "./animated-sphere"
+import GlassContainer from "./glass-container"
+import { useBackground } from "@/context/background-context"
 
 interface AudienceCardProps {
   title: string
@@ -14,24 +17,27 @@ interface AudienceCardProps {
 
 function AudienceCard({ title, description, index }: AudienceCardProps) {
   const [isHovered, setIsHovered] = useState(false)
+  const { accentColor } = useBackground()
 
   return (
     <ElegantReveal
-      className="bg-white rounded-xl p-6 shadow-md border border-gray-100 transition-all duration-500 hover:shadow-xl hover:translate-y-[-3px] hover:border-cyan-100"
+      className="transition-all duration-500 hover:translate-y-[-3px]"
       delay={100 * index}
       distance={10}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
-      <h3 className="text-xl font-semibold text-cyan-600 mb-3 inline-block relative audience-title">
-        {title}
-        <span
-          className={`absolute bottom-[-4px] left-0 h-[2px] bg-gradient-to-r from-cyan-500 to-cyan-600 transition-all duration-500 ${
-            isHovered ? "w-full" : "w-0"
-          }`}
-        ></span>
-      </h3>
-      <p className="text-gray-600 leading-relaxed">{description}</p>
+      <GlassContainer className="p-6">
+        <h3 className={`text-xl font-semibold text-${accentColor} mb-3 inline-block relative audience-title`}>
+          {title}
+          <span
+            className={`absolute bottom-[-4px] left-0 h-[2px] bg-gradient-to-r from-${accentColor} to-blue-600 transition-all duration-500 ${
+              isHovered ? "w-full" : "w-0"
+            }`}
+          ></span>
+        </h3>
+        <p className="text-gray-700 leading-relaxed">{description}</p>
+      </GlassContainer>
     </ElegantReveal>
   )
 }
@@ -87,6 +93,10 @@ export default function Audience() {
 
   return (
     <div ref={sectionRef} className="w-full">
+      {/* Remove vertical bars */}
+      <AnimatedSphere size="xl" className="absolute top-20 right-[-100px] opacity-10 z-0" />
+      <AnimatedSphere size="lg" className="absolute bottom-40 left-[-80px] opacity-10 z-0" />
+
       {/* Background decorative elements - very subtle */}
       <div className="absolute inset-0 pointer-events-none">
         {/* Subtle wave pattern */}
@@ -99,16 +109,18 @@ export default function Audience() {
 
       <div className="container mx-auto relative z-10">
         <RefinedTextReveal>
-          <h2 className="text-3xl md:text-4xl font-bold text-center mb-6 bg-gradient-to-r from-gray-900 via-blue-900 to-gray-900 bg-clip-text text-transparent">
+          <h2 className="text-3xl md:text-4xl font-bold text-center mb-6 logo-gradient-text">
             Who is HEALTH/HEALTH For?
           </h2>
         </RefinedTextReveal>
 
-        <ElegantReveal className="text-center text-gray-600 max-w-3xl mx-auto mb-16" delay={200} distance={10}>
-          <p>
-            Our platform was conceived to empower a spectrum of actors in the mental health and research landscape,
-            offering precision and efficiency tools.
-          </p>
+        <ElegantReveal className="text-center max-w-3xl mx-auto mb-16" delay={200} distance={10}>
+          <GlassContainer className="p-6">
+            <p className="text-gray-700">
+              Our platform was conceived to empower a spectrum of actors in the mental health and research landscape,
+              offering precision and efficiency tools.
+            </p>
+          </GlassContainer>
         </ElegantReveal>
 
         <div className="flex flex-col md:flex-row-reverse gap-12 items-center mb-16">

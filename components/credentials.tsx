@@ -5,6 +5,8 @@ import type React from "react"
 import { useEffect, useRef } from "react"
 import Image from "next/image"
 import { FileText, Server } from "lucide-react"
+import GlassContainer from "./glass-container"
+import { useBackground } from "@/context/background-context"
 
 interface CredentialCardProps {
   title: string
@@ -16,6 +18,7 @@ interface CredentialCardProps {
 
 function CredentialCard({ title, description, icon, logo, delay }: CredentialCardProps) {
   const cardRef = useRef<HTMLDivElement>(null)
+  const { accentColor } = useBackground()
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -43,30 +46,35 @@ function CredentialCard({ title, description, icon, logo, delay }: CredentialCar
   return (
     <div
       ref={cardRef}
-      className="bg-white rounded-xl p-6 shadow-md border border-gray-100 transition-all duration-500 opacity-0 translate-y-8 card-entrance hover:shadow-xl hover:translate-y-[-8px] text-center"
+      className="transition-all duration-800 opacity-0 translate-y-8 card-entrance hover:translate-y-[-8px] text-center"
     >
-      {logo ? (
-        <Image
-          src={logo || "/placeholder.svg"}
-          alt={`${title} Logo`}
-          width={150}
-          height={40}
-          className="h-10 w-auto mx-auto mb-6 object-contain"
-        />
-      ) : icon ? (
-        <div className="w-14 h-14 mx-auto flex items-center justify-center bg-gradient-to-br from-cyan-50 to-cyan-100/30 text-cyan-500 rounded-lg mb-6 border border-cyan-200/15">
-          {icon}
-        </div>
-      ) : null}
+      <GlassContainer className="p-6 h-full">
+        {logo ? (
+          <Image
+            src={logo || "/placeholder.svg"}
+            alt={`${title} Logo`}
+            width={150}
+            height={40}
+            className="h-10 w-auto mx-auto mb-6 object-contain"
+          />
+        ) : icon ? (
+          <div
+            className={`w-14 h-14 mx-auto flex items-center justify-center bg-gradient-to-br from-blue-50 to-blue-100/30 text-${accentColor} rounded-lg mb-6 border border-blue-200/15`}
+          >
+            {icon}
+          </div>
+        ) : null}
 
-      <h3 className="text-xl font-semibold text-gray-900 mb-3">{title}</h3>
-      <p className="text-gray-600 leading-relaxed">{description}</p>
+        <h3 className="text-xl font-semibold text-blue-900 mb-3">{title}</h3>
+        <p className="text-gray-700 leading-relaxed">{description}</p>
+      </GlassContainer>
     </div>
   )
 }
 
 export default function Credentials() {
   const sectionRef = useRef<HTMLDivElement>(null)
+  const { isTransitioning } = useBackground()
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -90,9 +98,20 @@ export default function Credentials() {
   }, [])
 
   return (
-    <section id="credentials" className="py-20 bg-gray-50" ref={sectionRef}>
+    <section
+      id="credentials"
+      ref={sectionRef}
+      className="py-20 relative"
+      style={{
+        willChange: isTransitioning ? "transform, opacity" : "auto",
+        transition: "background-color 1.2s ease-out",
+      }}
+    >
+      {/* Add a transition helper at the bottom of the section */}
+      <div className="absolute bottom-0 left-0 right-0 h-16 bg-gradient-to-b from-transparent to-blue-400/10 pointer-events-none"></div>
+
       <div className="container mx-auto">
-        <h2 className="text-3xl md:text-4xl font-bold text-center mb-16 bg-gradient-to-r from-gray-900 via-blue-900 to-gray-900 bg-clip-text text-transparent">
+        <h2 className="text-3xl md:text-4xl font-bold text-center mb-16 logo-gradient-text">
           Credentials and Validation
         </h2>
 
@@ -100,7 +119,7 @@ export default function Credentials() {
           <div className="md:w-1/2 premium-3d-effect">
             <div className="section-image-container rounded-xl overflow-hidden shadow-xl transition-all duration-500 hover:shadow-2xl hover:translate-y-[-10px]">
               <Image
-                src="/placeholder.svg?height=400&width=600&query=Microsoft for Startups integration diagram"
+                src="/placeholder-7lcc8.png"
                 alt="HEALTH/HEALTH Microsoft Partnership"
                 width={600}
                 height={400}
@@ -116,7 +135,7 @@ export default function Credentials() {
             <CredentialCard
               title="Microsoft for Startups"
               description="Selected for the prestigious Microsoft for Startups Founders Hub program, receiving technical support, resources, and validation from Microsoft for our innovative technology."
-              logo="/placeholder.svg?height=40&width=150&query=microsoft for startups logo"
+              logo="/placeholder-hpmi1.png"
               delay={150}
             />
           </div>
@@ -126,7 +145,7 @@ export default function Credentials() {
           <div className="md:w-1/2 premium-3d-effect">
             <div className="section-image-container rounded-xl overflow-hidden shadow-xl transition-all duration-500 hover:shadow-2xl hover:translate-y-[-10px]">
               <Image
-                src="/placeholder.svg?height=400&width=600&query=scientific research medical framework visualization"
+                src="/placeholder-dq8la.png"
                 alt="HEALTH/HEALTH Scientific Research"
                 width={600}
                 height={400}
@@ -150,7 +169,7 @@ export default function Credentials() {
           <div className="md:w-1/2 premium-3d-effect">
             <div className="section-image-container rounded-xl overflow-hidden shadow-xl transition-all duration-500 hover:shadow-2xl hover:translate-y-[-10px]">
               <Image
-                src="/placeholder.svg?height=400&width=600&query=GPU computing architecture high performance"
+                src="/placeholder-3lbvh.png"
                 alt="HEALTH/HEALTH GPU Architecture"
                 width={600}
                 height={400}

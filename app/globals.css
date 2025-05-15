@@ -4,30 +4,39 @@
 
 :root {
   /* Colors */
-  --color-primary: #00aabc;
-  --color-primary-dark: #008b9a;
-  --color-primary-light: #b3ecf3;
-  --color-primary-subtle: rgba(0, 170, 188, 0.08);
+  --color-primary: #0091cc;
+  --color-primary-dark: #0076a3;
+  --color-primary-light: #cce9f5;
+  --color-primary-subtle: rgba(0, 145, 204, 0.08);
 
-  --color-secondary: #1a365d;
-  --color-secondary-dark: #0e2748;
-  --color-secondary-light: #cedaeb;
+  --color-secondary: #0055af;
+  --color-secondary-dark: #00448c;
+  --color-secondary-light: #ccddef;
 
-  --color-text-dark: #0a1f3a;
-  --color-text-medium: #466082;
-  --color-text-light: #8596ad;
+  --color-text-dark: #001d29;
+  --color-text-medium: #003b52;
+  --color-text-light: #66bde0;
 
   --color-background: #ffffff;
   --color-background-light: #f7fafd;
-  --color-background-medium: #edf2f7;
+  --color-background-medium: #e6f4fa;
+
+  /* Blue shades for sections */
+  --blue-50: #f0f7ff;
+  --blue-100: #e0f0ff;
+  --blue-200: #c0e0ff;
+  --blue-300: #a0d0ff;
 
   /* Animations */
   --transition-timing-premium: cubic-bezier(0.25, 0.1, 0.25, 1);
+  --transition-timing-smooth: cubic-bezier(0.4, 0.0, 0.2, 1);
 }
 
 @layer base {
   body {
     @apply text-gray-700 bg-white;
+    /* Add padding to bottom on mobile for the bottom bar */
+    @apply md:pb-0 pb-8;
   }
 
   h1,
@@ -37,6 +46,46 @@
   h5,
   h6 {
     @apply text-gray-900 font-bold;
+  }
+
+  /* Mobile typography adjustments */
+  @media (max-width: 768px) {
+    h1,
+    .text-4xl,
+    .text-5xl,
+    .text-6xl {
+      font-size: 1.875rem !important; /* ~30px */
+      line-height: 1.2 !important;
+    }
+
+    h2,
+    .text-3xl,
+    .text-4xl {
+      font-size: 1.5rem !important; /* ~24px */
+      line-height: 1.3 !important;
+    }
+
+    h3,
+    .text-2xl,
+    .text-xl {
+      font-size: 1.25rem !important; /* ~20px */
+      line-height: 1.4 !important;
+    }
+
+    p,
+    .text-lg,
+    .text-base {
+      font-size: 0.9375rem !important; /* ~15px */
+      line-height: 1.5 !important;
+    }
+
+    .text-sm {
+      font-size: 0.8125rem !important; /* ~13px */
+    }
+
+    .text-xs {
+      font-size: 0.75rem !important; /* ~12px */
+    }
   }
 }
 
@@ -53,26 +102,70 @@
 }
 
 @layer utilities {
+  /* Add glassmorphism styles */
+  .glass-effect {
+    background: rgba(255, 255, 255, 0.6);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 8px 32px rgba(0, 85, 175, 0.1);
+  }
+
+  .glass-effect-dark {
+    background: rgba(0, 51, 105, 0.6);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+  }
+
+  /* Improve text readability */
+  p {
+    @apply leading-relaxed;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    @apply tracking-tight;
+  }
+
+  /* Enhance visual hierarchy */
+  .section-title {
+    @apply text-3xl md:text-4xl font-bold text-center mb-16 logo-gradient-text;
+  }
+
+  .section-subtitle {
+    @apply text-xl md:text-2xl font-semibold text-blue-800 mb-6;
+  }
+
+  .card-title {
+    @apply text-lg font-semibold text-blue-900 mb-2;
+  }
+
   .animate-title-fade-in {
     opacity: 0;
     transform: translateY(5px);
-    animation: titleFadeIn 1.2s var(--transition-timing-premium) forwards;
+    animation: titleFadeIn 1.5s var(--transition-timing-smooth) forwards;
   }
 
   .animate-subtitle-fade-in {
     opacity: 0;
     transform: translateY(5px);
-    animation: subtitleFadeIn 1.2s var(--transition-timing-premium) 0.2s forwards;
+    animation: subtitleFadeIn 1.5s var(--transition-timing-smooth) 0.3s forwards;
   }
 
   .animate-actions-fade-in {
     opacity: 0;
     transform: translateY(5px);
-    animation: actionsFadeIn 1.2s var(--transition-timing-premium) 0.4s forwards;
+    animation: actionsFadeIn 1.5s var(--transition-timing-smooth) 0.6s forwards;
   }
 
   .animate-subtle-wave {
-    animation: subtleWave 30s ease-in-out infinite alternate;
+    animation: subtleWave 40s ease-in-out infinite alternate;
   }
 
   .audience-card:hover .audience-card-line {
@@ -82,12 +175,30 @@
   .card-entrance {
     opacity: 0;
     transform: translateY(20px) scale(0.98);
-    transition: opacity 0.8s var(--transition-timing-premium), transform 0.8s var(--transition-timing-premium);
+    transition: opacity 1s var(--transition-timing-smooth), transform 1s var(--transition-timing-smooth);
   }
 
   .card-entrance.revealed {
     opacity: 1;
     transform: translateY(0) scale(1);
+  }
+
+  /* Optimize transitions between sections */
+  .section-transition-helper {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 80px;
+    background: linear-gradient(to bottom, transparent, rgba(0, 0, 0, 0.05));
+    z-index: 1;
+    pointer-events: none;
+    opacity: 0.5;
+  }
+
+  /* Smooth section transitions */
+  .section-in-view {
+    will-change: opacity, transform;
   }
 }
 
@@ -130,8 +241,8 @@
     opacity: 0.75;
   }
   50% {
-    transform: scale(1.02) skewX(0.5deg);
-    opacity: 0.85;
+    transform: scale(1.01) skewX(0.3deg);
+    opacity: 0.8;
   }
   100% {
     transform: scale(1) skewX(0deg);
@@ -151,6 +262,43 @@
   }
 }
 
+/* Slower version for reduced motion */
+@keyframes subtleFloatSlow {
+  0% {
+    transform: translate(0, 0);
+  }
+  50% {
+    transform: translate(5px, -4px);
+  }
+  100% {
+    transform: translate(-3px, 3px);
+  }
+}
+
+/* Logo-inspired animations */
+@keyframes pulseGlow {
+  0% {
+    box-shadow: 0 0 0 0 rgba(0, 85, 175, 0.15);
+  }
+  70% {
+    box-shadow: 0 0 0 12px rgba(0, 85, 175, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(0, 85, 175, 0);
+  }
+}
+
+.sphere-pulse {
+  animation: pulseGlow 4s infinite ease-in-out;
+}
+
+.logo-gradient-text {
+  background: linear-gradient(90deg, #003b52 0%, #0091cc 50%, #0055af 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
 /* Scroll-based animations */
 html {
   scroll-behavior: smooth;
@@ -159,18 +307,18 @@ html {
 
 /* Smooth section transitions */
 section {
-  transition: background-color 1s ease-out;
+  transition: background-color 1.5s cubic-bezier(0.25, 0.1, 0.25, 1);
 }
 
 /* Parallax effect for background elements */
 .bg-parallax {
   will-change: transform;
-  transition: transform 0.1s ease-out;
+  transition: transform 0.2s ease-out;
 }
 
 /* Hover effects for interactive elements */
 .interactive-element {
-  transition: all 0.3s var(--transition-timing-premium);
+  transition: all 0.4s var(--transition-timing-smooth);
 }
 
 .interactive-element:hover {
@@ -180,7 +328,7 @@ section {
 
 /* Micro-interactions for buttons */
 button {
-  transition: all 0.3s var(--transition-timing-premium);
+  transition: all 0.4s var(--transition-timing-smooth);
 }
 
 button:active {
@@ -209,7 +357,7 @@ section::after {
 /* Navigation link hover effect */
 .nav-link {
   position: relative;
-  transition: color 0.3s ease;
+  transition: color 0.4s ease;
 }
 
 .nav-link::after {
@@ -220,7 +368,7 @@ section::after {
   bottom: 0;
   left: 0;
   background: linear-gradient(to right, var(--color-primary), var(--color-primary-light));
-  transition: width 0.3s ease;
+  transition: width 0.4s ease;
 }
 
 .nav-link:hover::after,
@@ -235,5 +383,113 @@ a[href^="#"] {
 
 /* Section background transitions */
 .section-transition {
-  transition: background-color 1s ease-out;
+  transition: background-color 1.5s cubic-bezier(0.25, 0.1, 0.25, 1);
+}
+
+/* Section dividers for different blue backgrounds */
+.section-divider {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 80px;
+  z-index: 1;
+  pointer-events: none;
+}
+
+.divider-blue-50-to-blue-100 {
+  background: linear-gradient(to bottom, var(--blue-50), var(--blue-100));
+}
+
+.divider-blue-100-to-blue-200 {
+  background: linear-gradient(to bottom, var(--blue-100), var(--blue-200));
+}
+
+.divider-blue-200-to-blue-300 {
+  background: linear-gradient(to bottom, var(--blue-200), var(--blue-300));
+}
+
+.divider-blue-300-to-blue-600 {
+  background: linear-gradient(to bottom, var(--blue-300), #2563eb);
+}
+
+/* Adjust text colors for different backgrounds */
+.bg-blue-50 {
+  --text-primary: #1e3a8a;
+  --text-secondary: #1e40af;
+}
+
+.bg-blue-100 {
+  --text-primary: #1e3a8a;
+  --text-secondary: #1e40af;
+}
+
+.bg-blue-200 {
+  --text-primary: #1e3a8a;
+  --text-secondary: #1e40af;
+}
+
+.bg-blue-300 {
+  --text-primary: #1e3a8a;
+  --text-secondary: #1e40af;
+}
+
+/* Optimize performance for transitions */
+.optimize-gpu {
+  transform: translateZ(0);
+  backface-visibility: hidden;
+  perspective: 1000px;
+}
+
+/* Special transition for credentials to call-to-action */
+.credentials-to-cta-transition {
+  position: relative;
+  overflow: hidden;
+}
+
+.credentials-to-cta-transition::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 100px;
+  background: linear-gradient(to bottom, transparent, rgba(160, 208, 255, 0.3));
+  pointer-events: none;
+}
+
+/* Add a very subtle fade animation for elements */
+@keyframes subtleFade {
+  0% {
+    opacity: 0.7;
+  }
+  50% {
+    opacity: 0.9;
+  }
+  100% {
+    opacity: 0.7;
+  }
+}
+
+.subtle-fade {
+  animation: subtleFade 8s infinite cubic-bezier(0.4, 0.0, 0.2, 1);
+}
+
+/* Ensure smooth background transitions on mobile */
+@media (max-width: 768px) {
+  body,
+  main,
+  section,
+  div {
+    transition-duration: 1.5s !important;
+    transition-timing-function: cubic-bezier(0.25, 0.1, 0.25, 1) !important;
+  }
+
+  .bg-white,
+  .bg-blue-50,
+  .bg-blue-100,
+  .bg-blue-200,
+  .bg-blue-300 {
+    transition: background-color 1.5s cubic-bezier(0.25, 0.1, 0.25, 1) !important;
+  }
 }

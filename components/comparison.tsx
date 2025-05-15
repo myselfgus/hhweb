@@ -2,6 +2,8 @@
 
 import { useState, useEffect, useRef } from "react"
 import { ChevronLeft, ChevronRight, Check, X } from "lucide-react"
+import GlassContainer from "./glass-container"
+import { useBackground } from "@/context/background-context"
 
 type CompetitorValue = "true" | "false" | "partial"
 
@@ -52,16 +54,20 @@ const slides: CarouselSlide[] = [
 ]
 
 function CompetitorCard({ name, value, note, featured }: CompetitorCard) {
+  const { accentColor } = useBackground()
+
   return (
-    <div
-      className={`p-4 rounded-lg border transition-all duration-300 hover:translate-y-[-3px] ${
-        featured ? "bg-cyan-50 border-cyan-200" : "bg-white border-gray-200"
+    <GlassContainer
+      className={`p-4 transition-all duration-300 hover:translate-y-[-3px] ${
+        featured ? "bg-blue-50/80" : "bg-white/60"
       }`}
     >
       <div className="flex justify-between items-center mb-3">
         <div className="flex items-center gap-2">
           <div className="w-4 h-4 border border-gray-300 rounded-sm"></div>
-          <span className={`font-medium ${featured ? "text-cyan-700 font-semibold" : "text-gray-700"}`}>{name}</span>
+          <span className={`font-medium ${featured ? `text-${accentColor} font-semibold` : "text-gray-700"}`}>
+            {name}
+          </span>
         </div>
 
         <div
@@ -79,8 +85,8 @@ function CompetitorCard({ name, value, note, featured }: CompetitorCard) {
         </div>
       </div>
 
-      {note && <p className="text-sm text-gray-500">{note}</p>}
-    </div>
+      {note && <p className="text-sm text-gray-700">{note}</p>}
+    </GlassContainer>
   )
 }
 
@@ -88,6 +94,7 @@ export default function Comparison() {
   const [activeSlide, setActiveSlide] = useState(0)
   const [isMobile, setIsMobile] = useState(false)
   const carouselRef = useRef<HTMLDivElement>(null)
+  const { accentColor } = useBackground()
 
   useEffect(() => {
     const checkScreenSize = () => {
@@ -113,19 +120,23 @@ export default function Comparison() {
   }
 
   return (
-    <section id="comparison" className="py-20 bg-gray-50 relative overflow-hidden">
+    <section id="comparison" className="py-20 relative overflow-hidden">
+      {/* Remove vertical bars */}
+
       <div className="container mx-auto">
-        <h2 className="text-3xl md:text-4xl font-bold text-center mb-6 bg-gradient-to-r from-gray-900 via-blue-900 to-gray-900 bg-clip-text text-transparent">
+        <h2 className="text-3xl md:text-4xl font-bold text-center mb-6 logo-gradient-text">
           HEALTH/HEALTH vs. Existing Solutions
         </h2>
 
-        <p className="text-center text-gray-600 max-w-3xl mx-auto mb-16">
-          See how HEALTH/HEALTH positions itself in relation to available clinical documentation and analysis tools. Our
-          platform is designed to overcome inherent limitations and deliver superior clinical value.
-        </p>
+        <GlassContainer className="p-6 mb-16">
+          <p className="text-center text-gray-700 max-w-3xl mx-auto">
+            See how HEALTH/HEALTH positions itself in relation to available clinical documentation and analysis tools.
+            Our platform is designed to overcome inherent limitations and deliver superior clinical value.
+          </p>
+        </GlassContainer>
 
         <div className="max-w-5xl mx-auto relative px-10">
-          <div className="relative overflow-hidden rounded-xl bg-white shadow-xl">
+          <GlassContainer className="overflow-hidden rounded-xl shadow-xl">
             <div
               ref={carouselRef}
               className="flex transition-transform duration-500"
@@ -134,8 +145,8 @@ export default function Comparison() {
               {slides.map((slide, index) => (
                 <div key={index} className="min-w-full p-8">
                   <div className="mb-8">
-                    <h3 className="text-2xl font-semibold text-gray-900 mb-2">{slide.title}</h3>
-                    <p className="text-gray-600">{slide.description}</p>
+                    <h3 className="text-2xl font-semibold text-blue-900 mb-2">{slide.title}</h3>
+                    <p className="text-gray-700">{slide.description}</p>
                   </div>
 
                   <div className="grid md:grid-cols-2 gap-4">
@@ -146,11 +157,11 @@ export default function Comparison() {
                 </div>
               ))}
             </div>
-          </div>
+          </GlassContainer>
 
           <button
             onClick={prevSlide}
-            className="absolute top-1/2 left-0 transform -translate-y-1/2 w-10 h-10 bg-white rounded-full border border-gray-200 flex items-center justify-center text-gray-700 shadow-md hover:bg-cyan-50 hover:text-cyan-600 hover:border-cyan-200 transition-all duration-300 hover:scale-105"
+            className="absolute top-1/2 left-0 transform -translate-y-1/2 w-10 h-10 bg-white/80 backdrop-blur-sm rounded-full border border-gray-200 flex items-center justify-center text-gray-700 shadow-md hover:bg-blue-50 hover:text-blue-600 hover:border-blue-200 transition-all duration-300 hover:scale-105"
             aria-label="Previous slide"
           >
             <ChevronLeft className="w-5 h-5" />
@@ -158,7 +169,7 @@ export default function Comparison() {
 
           <button
             onClick={nextSlide}
-            className="absolute top-1/2 right-0 transform -translate-y-1/2 w-10 h-10 bg-white rounded-full border border-gray-200 flex items-center justify-center text-gray-700 shadow-md hover:bg-cyan-50 hover:text-cyan-600 hover:border-cyan-200 transition-all duration-300 hover:scale-105"
+            className="absolute top-1/2 right-0 transform -translate-y-1/2 w-10 h-10 bg-white/80 backdrop-blur-sm rounded-full border border-gray-200 flex items-center justify-center text-gray-700 shadow-md hover:bg-blue-50 hover:text-blue-600 hover:border-blue-200 transition-all duration-300 hover:scale-105"
             aria-label="Next slide"
           >
             <ChevronRight className="w-5 h-5" />
@@ -171,7 +182,7 @@ export default function Comparison() {
               key={index}
               onClick={() => setActiveSlide(index)}
               className={`w-3 h-3 rounded-full transition-all duration-300 ${
-                activeSlide === index ? "bg-cyan-500 transform scale-125" : "bg-gray-300 hover:bg-gray-400"
+                activeSlide === index ? `bg-${accentColor} transform scale-125` : "bg-gray-300 hover:bg-gray-400"
               }`}
               aria-label={`Go to slide ${index + 1}`}
             />

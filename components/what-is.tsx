@@ -5,6 +5,8 @@ import Image from "next/image"
 import ElegantReveal from "./animations/elegant-reveal"
 import RefinedTextReveal from "./animations/refined-text-reveal"
 import RefinedParallax from "./animations/refined-parallax"
+import VerticalBarsBackground from "./vertical-bars-background"
+import GlassContainer from "./glass-container"
 
 export default function WhatIs() {
   const [isInView, setIsInView] = useState(false)
@@ -34,19 +36,8 @@ export default function WhatIs() {
 
   return (
     <div ref={sectionRef} className="w-full">
-      {/* Background decorative elements - very subtle */}
-      <div className="absolute inset-0 pointer-events-none">
-        <div
-          className={`absolute -top-20 -right-20 w-80 h-80 rounded-full bg-cyan-50/20 blur-3xl transition-opacity duration-1500 ${
-            isInView ? "opacity-20" : "opacity-0"
-          }`}
-        ></div>
-        <div
-          className={`absolute -bottom-40 -left-40 w-96 h-96 rounded-full bg-blue-50/10 blur-3xl transition-opacity duration-1500 delay-300 ${
-            isInView ? "opacity-10" : "opacity-0"
-          }`}
-        ></div>
-      </div>
+      {/* Only blue bars that animate on scroll */}
+      <VerticalBarsBackground count={15} opacity={0.08} scrollAnimate={true} />
 
       <div className="container mx-auto relative z-10">
         <RefinedTextReveal>
@@ -79,19 +70,21 @@ export default function WhatIs() {
           </RefinedParallax>
 
           <ElegantReveal className="md:w-1/2" direction="right" distance={20} delay={200}>
-            <p className="text-gray-700 mb-4 leading-relaxed">
-              HEALTH/HEALTH is a revolutionary solution that accompanies healthcare professionals during consultations,
-              taking on the complex task of handling all notes, paperwork, reminders, and clinical information
-              management. Our platform allows doctors to fully dedicate themselves to human interaction, active
-              listening, and patient-focused decision making.
-            </p>
-            <p className="text-gray-700 leading-relaxed">
-              Built on a solid scientific foundation, the VINTRA framework encapsulates a vast compendium of technical,
-              academic, and scientific references, ensuring mathematical validation and methodological rigor.
-              HEALTH/HEALTH's power is driven by our proprietary technology: the IREAJE.CLOUD Eulerian runtime,
-              optimized to operate with our specialized Domain Specific Languages (.aje, .ire, .e), ensuring dimensional
-              analysis and interventions with unprecedented precision and adaptability in psychiatry.
-            </p>
+            <GlassContainer className="p-6 md:p-8">
+              <p className="text-gray-700 mb-4 leading-relaxed">
+                HEALTH/HEALTH is a revolutionary solution that accompanies healthcare professionals during
+                consultations, taking on the complex task of handling all notes, paperwork, reminders, and clinical
+                information management. Our platform allows doctors to fully dedicate themselves to human interaction,
+                active listening, and patient-focused decision making.
+              </p>
+              <p className="text-gray-700 leading-relaxed">
+                Built on a solid scientific foundation, the VINTRA framework encapsulates a vast compendium of
+                technical, academic, and scientific references, ensuring mathematical validation and methodological
+                rigor. HEALTH/HEALTH's power is driven by our proprietary technology: the IREAJE.CLOUD Eulerian runtime,
+                optimized to operate with our specialized Domain Specific Languages (.aje, .ire, .e), ensuring
+                dimensional analysis and interventions with unprecedented precision and adaptability in psychiatry.
+              </p>
+            </GlassContainer>
           </ElegantReveal>
         </div>
       </div>

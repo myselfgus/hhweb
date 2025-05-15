@@ -6,6 +6,8 @@ import { useEffect, useRef, useState } from "react"
 import { PlusIcon, LineChart, PlusCircle, FileText, HelpCircle } from "lucide-react"
 import ElegantReveal from "./animations/elegant-reveal"
 import RefinedTextReveal from "./animations/refined-text-reveal"
+import GlassContainer from "./glass-container"
+import { useBackground } from "@/context/background-context"
 
 interface FeatureCardProps {
   icon: React.ReactNode
@@ -16,31 +18,34 @@ interface FeatureCardProps {
 
 function FeatureCard({ icon, title, description, index }: FeatureCardProps) {
   const [isHovered, setIsHovered] = useState(false)
+  const { accentColor } = useBackground()
 
   return (
     <ElegantReveal
-      className="bg-white rounded-xl p-6 shadow-md border border-gray-100 transition-all duration-500 hover:shadow-xl hover:translate-y-[-3px] hover:border-cyan-100"
+      className="transition-all duration-500 hover:translate-y-[-3px]"
       delay={100 * index}
       distance={10}
       direction={index % 2 === 0 ? "up" : "down"}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
-      <div
-        className={`w-14 h-14 flex items-center justify-center bg-gradient-to-br from-cyan-50 to-cyan-100/30 text-cyan-500 rounded-lg mb-6 border border-cyan-200/15 transition-all duration-300 ${
-          isHovered ? "scale-105" : ""
-        }`}
-      >
-        {icon}
-      </div>
-      <h3
-        className={`text-xl font-semibold mb-3 transition-all duration-300 ${
-          isHovered ? "text-cyan-500 translate-x-0.5" : "text-gray-900"
-        }`}
-      >
-        {title}
-      </h3>
-      <p className="text-gray-600 leading-relaxed">{description}</p>
+      <GlassContainer className="p-6 h-full">
+        <div
+          className={`w-14 h-14 flex items-center justify-center bg-gradient-to-br from-blue-50 to-blue-100/30 text-${accentColor} rounded-lg mb-6 border border-blue-200/15 transition-all duration-300 ${
+            isHovered ? "scale-105" : ""
+          }`}
+        >
+          {icon}
+        </div>
+        <h3
+          className={`text-xl font-semibold mb-3 transition-all duration-300 ${
+            isHovered ? `text-${accentColor} translate-x-0.5` : "text-blue-900"
+          }`}
+        >
+          {title}
+        </h3>
+        <p className="text-gray-700 leading-relaxed">{description}</p>
+      </GlassContainer>
     </ElegantReveal>
   )
 }
@@ -106,6 +111,8 @@ export default function Features() {
 
   return (
     <div ref={sectionRef} className="w-full">
+      {/* Remove vertical bars */}
+
       {/* Background decorative elements - very subtle */}
       <div className="absolute inset-0 pointer-events-none">
         {/* Subtle dot pattern */}
@@ -118,10 +125,17 @@ export default function Features() {
 
       <div className="container mx-auto relative z-10">
         <RefinedTextReveal>
-          <h2 className="text-3xl md:text-4xl font-bold text-center mb-16 bg-gradient-to-r from-gray-900 via-blue-900 to-gray-900 bg-clip-text text-transparent">
+          <h2 className="text-3xl md:text-4xl font-bold text-center mb-16 logo-gradient-text">
             HEALTH/HEALTH Key Capabilities
           </h2>
         </RefinedTextReveal>
+
+        <GlassContainer className="p-6 md:p-8 mb-8">
+          <p className="text-center text-gray-700 max-w-3xl mx-auto mb-4">
+            Our platform provides a comprehensive suite of tools designed to transform clinical practice through
+            advanced dimensional analysis and AI-assisted documentation.
+          </p>
+        </GlassContainer>
 
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
           {features.map((feature, index) => (

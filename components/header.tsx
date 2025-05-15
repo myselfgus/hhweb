@@ -6,6 +6,7 @@ import Image from "next/image"
 import LanguageToggle from "./language-toggle"
 import { Menu, X } from "lucide-react"
 import { useBackground } from "@/context/background-context"
+import AnimatedLogo from "./animated-logo"
 
 interface NavLinkProps {
   href: string
@@ -54,12 +55,13 @@ export default function Header() {
   const headerRef = useRef<HTMLElement>(null)
   const { currentSection } = useBackground()
 
+  // Updated navigation links (removed call-to-action)
   const navLinks = [
     { href: "#hero", label: "Home" },
     { href: "#what-is", label: "About" },
     { href: "#features", label: "Features" },
     { href: "#who-for", label: "Audience" },
-    { href: "#differentiators", label: "Differentiators" },
+    { href: "#comparison", label: "Comparison" },
     { href: "#credentials", label: "Credentials" },
   ]
 
@@ -96,16 +98,8 @@ export default function Header() {
               })
             }}
           >
-            <div className="relative h-10 w-10">
-              <Image
-                src="/placeholder-4ku3i.png"
-                alt="HEALTH/HEALTH Logo"
-                width={40}
-                height={40}
-                className="object-contain transition-transform duration-300"
-              />
-            </div>
-            <span className="font-bold text-xl text-gray-900 tracking-tight">HEALTH/HEALTH</span>
+            <AnimatedLogo size="md" />
+            <span className="font-bold text-lg md:text-xl text-blue-800 tracking-tight">HEALTH/HEALTH</span>
           </Link>
 
           {/* Desktop Navigation */}
@@ -134,7 +128,7 @@ export default function Header() {
             </button>
 
             <div className="hidden md:flex items-center gap-2 bg-gradient-to-r from-white/70 to-gray-50/90 border border-gray-200/80 rounded-md px-3 py-2 shadow-sm">
-              <span className="text-xs font-semibold text-gray-600">Proud Member</span>
+              <span className="text-xs font-semibold text-gray-600">Member</span>
               <Image
                 src="/microsoft-logo.png"
                 alt="Microsoft for Startups Founders Hub"
@@ -164,17 +158,6 @@ export default function Header() {
               onClick={() => setMobileMenuOpen(false)}
             />
           ))}
-          <div className="flex items-center gap-2 bg-gradient-to-r from-white/70 to-gray-50/90 border border-gray-200/80 rounded-md px-3 py-2 mt-4 shadow-sm">
-            <span className="text-xs font-semibold text-gray-600">Proud Member</span>
-            <Image
-              src="/microsoft-logo.png"
-              alt="Microsoft for Startups Founders Hub"
-              width={20}
-              height={20}
-              className="h-5 w-auto"
-            />
-            <span className="text-xs text-gray-700">Microsoft for Startups Founders Hub</span>
-          </div>
         </nav>
       </div>
     </header>
