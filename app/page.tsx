@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import { useEffect, useState, useRef } from "react"
 import Header from "@/components/header"
 import ScrollIndicator from "@/components/scroll-indicator"
 import ScrollToTop from "@/components/scroll-to-top"
@@ -19,18 +19,34 @@ import { useSplashScreen } from "@/hooks/use-splash-screen"
 export default function Home() {
   const { showSplash, hasSeenSplash, handleSplashComplete } = useSplashScreen()
   const [contentVisible, setContentVisible] = useState(false)
+  const initialRender = useRef(true);
 
   useEffect(() => {
-    // If we're not showing the splash or user has seen it before,
-    // make content visible immediately
+    // Garantir hidratação sem conflitos
+    if (initialRender.current) {
+      initialRender.current = false;
+      // No primeiro render, mantém o estado como configurado no servidor
+      return;
+    }
+    
+    // Se não estamos mostrando splash ou usuário já viu, mostra o conteúdo imediatamente
     if (!showSplash || hasSeenSplash) {
       setContentVisible(true)
     }
+    
+    // Set content to visible after a delay matching the splashscreen duration
+    // This ensures content is ready when splash animation completes
+    const timer = setTimeout(() => {
+      setContentVisible(true)
+    }, 7000); // Ajustado para corresponder à duração da splashscreen
+    
+    return () => clearTimeout(timer);
   }, [showSplash, hasSeenSplash])
 
   return (
     <>
-      {showSplash && <SplashScreen onComplete={handleSplashComplete} />}
+      {/* Exibindo a splashscreen sem condicionais para garantir que seja sempre mostrada */}
+      <SplashScreen onComplete={handleSplashComplete} />
 
       <main className={`min-h-screen transition-opacity duration-1000 ${contentVisible ? "opacity-100" : "opacity-0"}`}>
         <ScrollIndicator />

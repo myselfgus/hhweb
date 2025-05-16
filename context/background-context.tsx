@@ -1,14 +1,16 @@
 "use client"
 
-import { createContext, useContext, useState, useEffect, useRef, type ReactNode } from "react"
+import { createContext, useContext, useState, useEffect, useRef, type ReactNode, useMemo } from "react"
+
+type SectionStyle = {
+  background: string
+  textColor: string
+  glassIntensity: "light" | "medium" | "strong"
+  accentColor: string
+}
 
 type SectionColors = {
-  [key: string]: {
-    background: string
-    textColor: string
-    glassIntensity: "light" | "medium" | "strong"
-    accentColor: string
-  }
+  [key: string]: SectionStyle
 }
 
 // Define subtle background colors for each section with different blue shades
@@ -57,22 +59,15 @@ const sectionColors: SectionColors = {
   },
 }
 
-type BackgroundContextType = {
+interface BackgroundContextType extends SectionStyle {
   currentSection: string
-  backgroundColor: string
-  textColor: string
-  glassIntensity: "light" | "medium" | "strong"
-  accentColor: string
   setCurrentSection: (section: string) => void
   isTransitioning: boolean
 }
 
 const BackgroundContext = createContext<BackgroundContextType>({
   currentSection: "default",
-  backgroundColor: sectionColors.default.background,
-  textColor: sectionColors.default.textColor,
-  glassIntensity: sectionColors.default.glassIntensity,
-  accentColor: sectionColors.default.accentColor,
+  ...sectionColors.default,
   setCurrentSection: () => {},
   isTransitioning: false,
 })
@@ -80,17 +75,16 @@ const BackgroundContext = createContext<BackgroundContextType>({
 export const useBackground = () => useContext(BackgroundContext)
 
 export const BackgroundProvider = ({ children }: { children: ReactNode }) => {
+  // Use a single state for the current section instead of multiple states
   const [currentSection, setCurrentSection] = useState("default")
-  const [backgroundColor, setBackgroundColor] = useState(sectionColors.default.background)
-  const [textColor, setTextColor] = useState(sectionColors.default.textColor)
-  const [glassIntensity, setGlassIntensity] = useState<"light" | "medium" | "strong">(
-    sectionColors.default.glassIntensity,
-  )
-  const [accentColor, setAccentColor] = useState(sectionColors.default.accentColor)
+  // Single state for transition flag
   const [isTransitioning, setIsTransitioning] = useState(false)
   const transitionTimeoutRef = useRef<NodeJS.Timeout | null>(null)
-  const lastSectionRef = useRef<string>("default")
-  const animationFrameRef = useRef<number | null>(null)
+  
+  // Memoize the current section style to avoid unnecessary re-renders
+  const currentStyle = useMemo(() => {
+    return sectionColors[currentSection] || sectionColors.default
+  }, [currentSection])
 
   // Smooth section change with debounce
   const handleSectionChange = (section: string) => {
@@ -105,50 +99,36 @@ export const BackgroundProvider = ({ children }: { children: ReactNode }) => {
     // Set transitioning state
     setIsTransitioning(true)
 
-    // Store the last section for smooth transitions
-    lastSectionRef.current = currentSection
-
-    // Update section immediately but with a small delay for state updates
+    // Update section immediately
     setCurrentSection(section)
 
     // Clear transitioning state after animation completes
     transitionTimeoutRef.current = setTimeout(() => {
       setIsTransitioning(false)
-    }, 800) // Reduced from 1000ms to 800ms for faster response
+    }, 800)
   }
 
+  // Clean up timeouts on unmount
   useEffect(() => {
-    // Update background color when section changes with smooth transition
-    const colors = sectionColors[currentSection] || sectionColors.default
-
-    // Simplify the color updates - remove requestAnimationFrame for more direct updates
-    setBackgroundColor(colors.background)
-    setTextColor(colors.textColor)
-    setGlassIntensity(colors.glassIntensity)
-    setAccentColor(colors.accentColor)
-
-    // Clean up on unmount
     return () => {
       if (transitionTimeoutRef.current) {
         clearTimeout(transitionTimeoutRef.current)
       }
     }
-  }, [currentSection])
+  }, [])
+
+  // Create a context value object from the currentStyle and other properties
+  const contextValue = {
+    currentSection,
+    ...currentStyle,
+    setCurrentSection: handleSectionChange,
+    isTransitioning,
+  }
 
   return (
-    <BackgroundContext.Provider
-      value={{
-        currentSection,
-        backgroundColor,
-        textColor,
-        glassIntensity,
-        accentColor,
-        setCurrentSection: handleSectionChange,
-        isTransitioning,
-      }}
-    >
+    <BackgroundContext.Provider value={contextValue}>
       <div
-        className={`transition-colors duration-1000 ease-out ${backgroundColor} ${textColor}`}
+        className={`transition-colors duration-1000 ease-out ${currentStyle.background} ${currentStyle.textColor}`}
         style={{
           willChange: "background-color",
         }}
