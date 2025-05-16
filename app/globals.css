@@ -33,19 +33,43 @@
 }
 
 @layer base {
+  :root {
+    --font-sans: var(--font-montserrat), system-ui, sans-serif;
+    --font-heading: var(--font-sora), system-ui, sans-serif;
+    --font-display: var(--font-playfair), serif;
+    --font-mono: var(--font-space-grotesk), monospace;
+    --font-secondary: var(--font-manrope), system-ui, sans-serif;
+  }
+  
+  /* Definindo a hierarquia de fontes */
   body {
-    @apply text-gray-700 bg-white;
+    @apply text-gray-700 bg-white font-sans;
+    font-family: var(--font-sans);
     /* Adiciona padding inferior no mobile para acomodar a barra */
     @apply md:pb-0 pb-10;
   }
 
-  h1,
-  h2,
-  h3,
-  h4,
-  h5,
-  h6 {
+  h1 {
     @apply text-gray-900 font-bold;
+    font-family: var(--font-heading);
+  }
+  
+  h2, h3 {
+    @apply text-gray-900 font-bold;
+    font-family: var(--font-display);
+  }
+  
+  h4, h5, h6 {
+    @apply text-gray-900 font-bold;
+    font-family: var(--font-secondary);
+  }
+  
+  p {
+    font-family: var(--font-sans);
+  }
+  
+  .tech-text, .stat-text, code, pre {
+    font-family: var(--font-mono);
   }
 
   /* Mobile typography adjustments */
@@ -527,6 +551,45 @@ a[href^="#"] {
 
 .divider-blue-300-to-blue-600 {
   background: linear-gradient(to bottom, var(--blue-300), #2563eb);
+}
+
+/* Efeitos de transição melhorados */
+.fade-in-section {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+}
+
+.fade-in-section.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Efeito de scroll */
+.scroll-slide-effect {
+  transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.scroll-slide-effect:not(.in-view) {
+  opacity: 0.5;
+  transform: translateY(30px);
+}
+
+.scroll-slide-effect.in-view {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Efeitos para elementos em cascata */
+.cascade-item {
+  opacity: 0;
+  transform: translateY(15px);
+  transition: opacity 0.5s ease-out, transform 0.5s ease-out;
+}
+
+.cascade-item.in-view {
+  opacity: 1;
+  transform: translateY(0);
 }
 
 /* Adjust text colors for different backgrounds */

@@ -45,11 +45,11 @@ export default function AnimatedLogo({
   const logoRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
-    const timeout = setTimeout(() => {
-      if (isMounted.current) setIsVisible(true)
-    }, 50)
+    // Garantir que o logo se torna visível sempre
+    setIsVisible(true)
+    
+    // Cleanup
     return () => {
-      clearTimeout(timeout)
       isMounted.current = false
     }
   }, [])
@@ -109,7 +109,7 @@ export default function AnimatedLogo({
         {/* Fallback: logo final para SEO/acessibilidade e caso animated=false */}
         <div className={`transition-opacity duration-500 ${animated ? "opacity-0" : "opacity-100"}`}>
           <Image
-            src="/hh-logo.png"
+            src="/health-health-logo.png"
             alt="HEALTH/HEALTH Logo"
             width={width}
             height={height}

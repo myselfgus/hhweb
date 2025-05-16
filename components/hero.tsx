@@ -66,9 +66,9 @@ export default function Hero() {
       <style jsx>{logoAnimationStyles}</style>
       <div ref={heroRef} className="w-full">
         {/* Background decorations with subtle parallax */}
-        <div className="absolute inset-0 z-0 bg-parallax" data-speed="0.02"></div>
+        <div className="absolute inset-0 z-0 bg-parallax" data-speed="0.02" style={{opacity:0.08}}></div>
 
-        <div className="absolute inset-0 z-0 opacity-85 animate-subtle-wave bg-parallax" data-speed="0.03">
+        <div className="absolute inset-0 z-0 animate-subtle-wave bg-parallax" data-speed="0.03" style={{opacity:0.06}}>
           <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-br from-cyan-50/5 via-transparent to-blue-900/3"></div>
         </div>
 
@@ -77,16 +77,20 @@ export default function Hero() {
           className="absolute top-[15%] left-[10%] w-32 h-32 rounded-full bg-gradient-to-r from-cyan-100/10 to-cyan-200/5 blur-xl"
           amplitude={8}
           period={12}
-        />
+        >
+          {/* Elemento decorativo, sem children visuais */}
+        </SubtleFloat>
 
         <SubtleFloat
           className="absolute bottom-[20%] right-[15%] w-40 h-40 rounded-full bg-gradient-to-r from-blue-100/5 to-cyan-100/5 blur-xl"
           amplitude={6}
           period={15}
           delay={1}
-        />
+        >
+          {/* Elemento decorativo, sem children visuais */}
+        </SubtleFloat>
 
-        <div className="container mx-auto relative z-1">
+        <div className="container mx-auto relative z-10">
           <div className="max-w-3xl mx-auto text-center">
             <div
               className={`mb-8 flex justify-center transition-all duration-1200 ease-in-out ${

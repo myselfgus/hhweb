@@ -14,6 +14,14 @@ export default function SplashScreen({ onComplete, duration = 5000 }: SplashScre
 
   useEffect(() => {
     // Track all timeouts to clean them up properly
+    if (typeof window !== 'undefined') {
+      const hasSeenSplash = sessionStorage.getItem('hasSeenSplash') === 'true';
+      if (hasSeenSplash) {
+        setAnimationStage(4);
+        onComplete();
+        return;
+      }
+    }
     const timeouts: NodeJS.Timeout[] = []
     
     // Function to safely create timeouts
@@ -39,7 +47,9 @@ export default function SplashScreen({ onComplete, duration = 5000 }: SplashScre
     // Stage 4: Fade out e complete com transição mais suave
     createTimeout(() => {
       setAnimationStage(4)
-
+      if (typeof window !== 'undefined') {
+        sessionStorage.setItem('hasSeenSplash', 'true');
+      }
       // Call onComplete with smoother timing
       createTimeout(() => {
         onComplete()
@@ -97,7 +107,7 @@ export default function SplashScreen({ onComplete, duration = 5000 }: SplashScre
           }`}
           style={{ animationPlayState: animationStage >= 2 ? "running" : "paused" }}
         >
-          <AnimatedLogo size="lg" className="w-32 h-32" animated={true} />
+          <AnimatedLogo size="lg" className="w-32 h-32" animated={true} splashMode={true} />
         </div>
 
         {/* Brand name */}
