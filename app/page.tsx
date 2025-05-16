@@ -20,6 +20,7 @@ export default function Home() {
   const { showSplash, hasSeenSplash, handleSplashComplete } = useSplashScreen()
   const [contentVisible, setContentVisible] = useState(false)
   const initialRender = useRef(true);
+  const transitionTimer = useRef<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
     // Garantir hidratação sem conflitos
@@ -36,11 +37,15 @@ export default function Home() {
     
     // Set content to visible after a delay matching the splashscreen duration
     // This ensures content is ready when splash animation completes
-    const timer = setTimeout(() => {
+    transitionTimer.current = setTimeout(() => {
       setContentVisible(true)
-    }, 7000); // Ajustado para corresponder à duração da splashscreen
+    }, 5000); // Tempo reduzido para uma transição mais suave
     
-    return () => clearTimeout(timer);
+    return () => {
+      if (transitionTimer.current) {
+        clearTimeout(transitionTimer.current);
+      }
+    };
   }, [showSplash, hasSeenSplash])
 
   return (
@@ -48,7 +53,7 @@ export default function Home() {
       {/* Exibindo a splashscreen sem condicionais para garantir que seja sempre mostrada */}
       <SplashScreen onComplete={handleSplashComplete} />
 
-      <main className={`min-h-screen transition-opacity duration-1000 ${contentVisible ? "opacity-100" : "opacity-0"}`}>
+      <main className={`min-h-screen splash-to-content-transition ${contentVisible ? "opacity-100 transform-none" : "opacity-0 translate-y-4"}`}>
         <ScrollIndicator />
         <ScrollToTop />
         <Header />

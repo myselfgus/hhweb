@@ -35,8 +35,8 @@
 @layer base {
   body {
     @apply text-gray-700 bg-white;
-    /* Add padding to bottom on mobile for the bottom bar */
-    @apply md:pb-0 pb-8;
+    /* Adiciona padding inferior no mobile para acomodar a barra */
+    @apply md:pb-0 pb-10;
   }
 
   h1,
@@ -329,9 +329,11 @@
 @keyframes splashFadeOut {
   0% {
     opacity: 1;
+    transform: scale(1);
   }
   100% {
     opacity: 0;
+    transform: scale(1.05);
   }
 }
 
@@ -589,13 +591,13 @@ a[href^="#"] {
   animation: subtleFade 8s infinite cubic-bezier(0.4, 0.0, 0.2, 1);
 }
 
-/* Ensure smooth background transitions on mobile */
+/* Ensure smooth background transitions on mobile with optimized responsive design */
 @media (max-width: 768px) {
   body,
   main,
   section,
   div {
-    transition-duration: 1.5s !important;
+    transition-duration: 1.2s !important;
     transition-timing-function: cubic-bezier(0.25, 0.1, 0.25, 1) !important;
   }
 
@@ -604,31 +606,87 @@ a[href^="#"] {
   .bg-blue-100,
   .bg-blue-200,
   .bg-blue-300 {
-    transition: background-color 1.5s cubic-bezier(0.25, 0.1, 0.25, 1) !important;
+    transition: background-color 1.2s cubic-bezier(0.25, 0.1, 0.25, 1) !important;
+  }
+  
+  /* Flex adjustments for responsive design */
+  .flex-responsive {
+    display: flex !important;
+    flex-direction: column !important;
+  }
+  
+  .flex-row-responsive {
+    display: flex !important;
+    flex-direction: row !important;
+    flex-wrap: wrap !important;
+  }
+  
+  /* Minimum width adjustments for responsive elements */
+  .min-w-responsive {
+    min-width: 100% !important;
+  }
+  
+  /* Typography adjustments for better mobile reading */
+  p {
+    font-size: 1rem !important;
+    line-height: 1.6 !important;
+  }
+  
+  /* Enhanced animations for splash screen transition */
+  .splash-to-content-transition {
+    transition: all 1.5s cubic-bezier(0.25, 0.1, 0.25, 1) !important;
   }
 }
 
 /* Otimizações específicas para dispositivos móveis */
 @media (max-width: 768px) {
-  /* Simplificar transições para melhorar o desempenho */
+  /* Otimizações de performence adaptadas para versão totalmente responsiva */
   body,
   main,
   section,
   div {
-    transition-duration: 0.8s !important;
-    transition-timing-function: ease-out !important;
+    transition-duration: 1s !important;
+    transition-timing-function: cubic-bezier(0.25, 0.1, 0.25, 1) !important;
   }
 
-  /* Reduzir a complexidade das animações em dispositivos móveis */
-  .bg-parallax,
-  .subtle-fade,
+  /* Manter algumas animações importantes para a experiência, mas simplificar outras */
+  .bg-parallax {
+    transform: none !important;
+  }
+  
+  .subtle-fade {
+    animation: subtleFade 10s infinite ease-in-out !important;
+  }
+  
   .animate-subtle-wave {
-    animation: none !important;
-    transition: none !important;
+    animation: subtleWave 60s infinite alternate ease-in-out !important;
   }
 
   /* Garantir que as barras verticais apareçam corretamente */
   [class*="vertical-bars"] div {
-    transition: height 0.8s ease-out, transform 0.8s ease-out, opacity 0.8s ease-out !important;
+    transition: all 1s cubic-bezier(0.25, 0.1, 0.25, 1) !important;
+  }
+  
+  /* Melhorar a responsividade de elementos flex */
+  .flex {
+    display: flex !important;
+  }
+  
+  .flex-col {
+    flex-direction: column !important;
+  }
+  
+  /* Garantir que contêineres tenham largura mínima adequada */
+  .container {
+    min-width: 100% !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+    padding-left: 1rem !important;
+    padding-right: 1rem !important;
+  }
+  
+  /* Ajustes para visualização em dispositivos pequenos */
+  .section-title {
+    margin-bottom: 2rem !important;
   }
 }

@@ -35,7 +35,7 @@ function NavLink({ href, label, isActive, onClick }: NavLinkProps) {
           })
         }
       }}
-      className={`relative px-3 py-2 text-sm font-medium transition-colors duration-300 hover:text-cyan-600 ${
+      className={`relative px-3 py-2 custom:text-sm text-base font-medium transition-colors duration-300 hover:text-cyan-600 ${
         isActive ? "text-cyan-600" : "text-gray-700"
       }`}
     >
@@ -99,21 +99,31 @@ export default function Header() {
             }}
           >
             <AnimatedLogo size="md" />
-            <span className="font-bold text-lg md:text-xl text-blue-800 tracking-tight">HEALTH/HEALTH</span>
+            <span className="font-bold text-lg custom:text-xl text-blue-800 tracking-tight">HEALTH/HEALTH</span>
           </Link>
 
-          {/* Desktop Navigation */}
-          <nav className="hidden md:flex items-center space-x-1">
-            {navLinks.map((link) => (
-              <NavLink
-                key={link.href}
-                href={link.href}
-                label={link.label}
-                isActive={currentSection === link.href.replace("#", "")}
-                onClick={() => {}}
-              />
-            ))}
-          </nav>
+          {/* Container Microsoft agora vem antes do CTA */}
+          <div className="hidden md:flex items-center gap-2 bg-gradient-to-r from-white/70 to-gray-50/90 border border-gray-200/80 rounded-md px-3 py-2 shadow-sm">
+            <span className="text-xs font-semibold text-gray-600">Member</span>
+            <Image
+              src="/microsoft-logo.png"
+              alt="Microsoft for Startups Founders Hub"
+              width={20}
+              height={20}
+              className="h-5 w-auto transition-transform duration-300 hover:scale-110"
+            />
+            <span className="text-xs text-gray-700 hidden md:inline">Microsoft for Startups Founders Hub</span>
+          </div>
+
+          {/* Desktop CTA Button */}
+          <div className="hidden md:flex items-center space-x-1">
+            <button
+              className="px-5 py-2 rounded-md bg-gradient-to-r from-blue-500 to-cyan-500 text-white font-semibold shadow-md hover:from-blue-600 hover:to-cyan-600 transition-colors duration-300"
+              onClick={() => {/* ação do upload aqui */}}
+            >
+              Upload your record and see it
+            </button>
+          </div>
 
           <div className="flex items-center gap-4">
             <LanguageToggle />
@@ -126,18 +136,6 @@ export default function Header() {
             >
               {mobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
             </button>
-
-            <div className="hidden md:flex items-center gap-2 bg-gradient-to-r from-white/70 to-gray-50/90 border border-gray-200/80 rounded-md px-3 py-2 shadow-sm">
-              <span className="text-xs font-semibold text-gray-600">Member</span>
-              <Image
-                src="/microsoft-logo.png"
-                alt="Microsoft for Startups Founders Hub"
-                width={20}
-                height={20}
-                className="h-5 w-auto transition-transform duration-300 hover:scale-110"
-              />
-              <span className="text-xs text-gray-700 hidden md:inline">Microsoft for Startups Founders Hub</span>
-            </div>
           </div>
         </div>
       </div>
@@ -148,17 +146,7 @@ export default function Header() {
           mobileMenuOpen ? "max-h-[400px] border-b border-gray-100" : "max-h-0"
         }`}
       >
-        <nav className="container mx-auto py-4 flex flex-col space-y-1">
-          {navLinks.map((link) => (
-            <NavLink
-              key={link.href}
-              href={link.href}
-              label={link.label}
-              isActive={currentSection === link.href.replace("#", "")}
-              onClick={() => setMobileMenuOpen(false)}
-            />
-          ))}
-        </nav>
+        {/* No CTA on mobile */}
       </div>
     </header>
   )

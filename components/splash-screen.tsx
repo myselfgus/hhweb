@@ -8,7 +8,7 @@ interface SplashScreenProps {
   duration?: number
 }
 
-export default function SplashScreen({ onComplete, duration = 7000 }: SplashScreenProps) {
+export default function SplashScreen({ onComplete, duration = 5000 }: SplashScreenProps) {
   const [animationStage, setAnimationStage] = useState(0)
   const timeoutsRef = useRef<NodeJS.Timeout[]>([])
 
@@ -36,14 +36,14 @@ export default function SplashScreen({ onComplete, duration = 7000 }: SplashScre
       setAnimationStage(3)
     }, 3000) // Mais tempo para garantir que a animação seja apreciada
 
-    // Stage 4: Fade out and complete
+    // Stage 4: Fade out e complete com transição mais suave
     createTimeout(() => {
       setAnimationStage(4)
 
-      // Call onComplete after fade out animation
+      // Call onComplete with smoother timing
       createTimeout(() => {
         onComplete()
-      }, 1500) // Mais tempo para a transição final
+      }, 1000) // Tempo reduzido para transição mais suave
     }, duration)
 
     // Store all timeouts in the ref for potential access outside this effect
@@ -57,8 +57,8 @@ export default function SplashScreen({ onComplete, duration = 7000 }: SplashScre
 
   return (
     <div
-      className={`fixed inset-0 z-[9999] flex items-center justify-center bg-white transition-opacity duration-1000 ${
-        animationStage === 4 ? "opacity-0" : "opacity-100"
+      className={`fixed inset-0 z-[9999] flex items-center justify-center bg-white transition-all duration-1500 ease-out ${
+        animationStage === 4 ? "opacity-0 scale-105" : "opacity-100 scale-100"
       }`}
     >
       {/* Background bars */}

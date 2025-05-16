@@ -19,7 +19,7 @@ const logoAnimationCSS = `
   }
   @keyframes logoSphereAnimation {
     0% { transform: scale(1); }
-    50% { transform: scale(1.10); }
+    50% { transform: scale(1.1000); }
     100% { transform: scale(1); }
   }
   .logo-bar {

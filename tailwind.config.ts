@@ -14,6 +14,7 @@ const config: Config = {
       padding: "2rem",
       screens: {
         "2xl": "1400px",
+        custom: "950px", // breakpoint customizado para 950px
       },
     },
     extend: {
