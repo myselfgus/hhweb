@@ -10,9 +10,10 @@ import Hero from "@/components/hero"
 import Footer from "@/components/footer"
 import SplashScreen from "@/components/splash-screen"
 import { useSplashScreen } from "@/hooks/use-splash-screen"
-import VisionSection from "@/components/vision-section"
-import SolutionSection from "@/components/solution-section"
-import TechnologySection from "@/components/technology-section"
+import DashboardSection from "@/components/dashboard-section"
+import PipelineSection from "@/components/pipeline-section"
+import DimensionsSection from "@/components/dimensions-section"
+import ClinicalDocSection from "@/components/clinical-doc-section"
 import FounderSection from "@/components/founder-section"
 import DevelopersSection from "@/components/developers-section"
 import InvestorsSection from "@/components/investors-section"
@@ -65,9 +66,10 @@ export default function Home() {
         >
           <Hero />
         </SectionObserver>
-        <VisionSection />
-        <SolutionSection />
-        <TechnologySection />
+        <DashboardSection />
+        <PipelineSection />
+        <DimensionsSection />
+        <ClinicalDocSection />
         <FounderSection />
         <DevelopersSection />
         <InvestorsSection />
