@@ -92,25 +92,3 @@ body {
     @apply bg-background text-foreground;
   }
 }
-
-@keyframes dashFlow {
-  from {
-    stroke-dasharray: 500;
-    stroke-dashoffset: 500;
-  }
-  to {
-    stroke-dasharray: 500;
-    stroke-dashoffset: 0;
-  }
-}
-
-@keyframes moveToFinal {
-  from {
-    transform: scale(0);
-    opacity: 0;
-  }
-  to {
-    transform: scale(1);
-    opacity: 1;
-  }
-}

@@ -1,152 +1,146 @@
 "use client"
 
-import { useState, useEffect, useRef } from "react"
+import { useState, useEffect } from "react"
+import { usePathname } from "next/navigation"
 import Link from "next/link"
-import Image from "next/image"
-import LanguageToggle from "./language-toggle"
-import { Menu, X } from "lucide-react"
-import { useBackground } from "@/context/background-context"
-import AnimatedLogo from "./animated-logo"
-
-interface NavLinkProps {
-  href: string
-  label: string
-  isActive: boolean
-  onClick: () => void
-}
-
-function NavLink({ href, label, isActive, onClick }: NavLinkProps) {
-  return (
-    <a
-      href={href}
-      onClick={(e) => {
-        e.preventDefault()
-        onClick()
-
-        // Get the target element
-        const targetId = href.replace("#", "")
-        const targetElement = document.getElementById(targetId)
-
-        if (targetElement) {
-          // Smooth scroll to the element
-          window.scrollTo({
-            top: targetElement.offsetTop - 80, // Offset for header height
-            behavior: "smooth",
-          })
-        }
-      }}
-      className={`relative px-3 py-2 custom:text-sm text-base font-medium transition-colors duration-300 hover:text-cyan-600 ${
-        isActive ? "text-cyan-600" : "text-gray-700"
-      }`}
-    >
-      {label}
-      <span
-        className={`absolute bottom-0 left-0 h-0.5 bg-gradient-to-r from-cyan-500 to-cyan-400 transition-all duration-300 ${
-          isActive ? "w-full" : "w-0"
-        }`}
-      ></span>
-    </a>
-  )
-}
+import LanguageSwitcher from "./language-switcher"
+import { ThemeToggle } from "./theme-toggle"
+import { scrollToSection } from "@/utils/enhanced-smooth-scroll"
+import { useIsMobile } from "@/hooks/use-mobile"
 
 export default function Header() {
+  const [activeSection, setActiveSection] = useState("home")
   const [scrolled, setScrolled] = useState(false)
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
-  const headerRef = useRef<HTMLElement>(null)
-  const { currentSection } = useBackground()
+  const pathname = usePathname()
+  const isMobile = useIsMobile()
 
-  // Updated navigation links (removed call-to-action)
-  const navLinks = [
-    { href: "#hero", label: "Home" },
-    { href: "#what-is", label: "About" },
-    { href: "#features", label: "Features" },
-    { href: "#who-for", label: "Audience" },
-    { href: "#comparison", label: "Comparison" },
-    { href: "#credentials", label: "Credentials" },
-  ]
+  const sections = ["home", "about", "approach", "visualization", "benefits", "contact"]
+
+  const handleScroll = () => {
+    setScrolled(window.scrollY > 50)
+
+    const scrollPosition = window.scrollY
+
+    // Find which section is currently in view
+    const sectionElements = sections.map((section) => {
+      const element = document.getElementById(section)
+      if (!element) return { id: section, top: 0, bottom: 0 }
+
+      const rect = element.getBoundingClientRect()
+      return {
+        id: section,
+        top: rect.top + scrollPosition,
+        bottom: rect.bottom + scrollPosition,
+      }
+    })
+
+    for (const section of sectionElements) {
+      if (scrollPosition >= section.top - 200 && scrollPosition < section.bottom - 200) {
+        setActiveSection(section.id)
+        break
+      }
+    }
+  }
 
   useEffect(() => {
-    const handleScroll = () => {
-      setScrolled(window.scrollY > 50)
-    }
-
-    window.addEventListener("scroll", handleScroll, { passive: true })
-    handleScroll() // Initial check
-
+    window.addEventListener("scroll", handleScroll)
     return () => window.removeEventListener("scroll", handleScroll)
   }, [])
 
   return (
     <header
-      ref={headerRef}
-      className={`fixed top-0 left-0 w-full z-[1000] transition-all duration-500 ${
-        scrolled ? "bg-white/95 backdrop-blur-sm shadow-sm" : "bg-white/90"
+      className={`fixed left-0 w-full z-50 transition-all duration-300 ${
+        scrolled ? "py-2 bg-background/80 backdrop-blur-lg shadow-lg border-b border-border" : "py-4 bg-transparent"
       }`}
+      style={{
+        top: "var(--banner-height, 0)",
+        marginTop: "-1px", // Adjust to align perfectly with the bottom border of the banner
+      }}
     >
-      <div className="container mx-auto">
-        <div
-          className={`flex items-center justify-between transition-all duration-300 ${scrolled ? "h-16" : "h-[70px]"}`}
-        >
-          <Link
-            href="#hero"
-            className="flex items-center gap-3 hover:translate-y-[-1px] transition-transform duration-300"
-            onClick={(e) => {
-              e.preventDefault()
-              window.scrollTo({
-                top: 0,
-                behavior: "smooth",
-              })
-            }}
-          >
-            <AnimatedLogo size="md" />
-            <span className="font-bold text-lg custom:text-xl text-blue-800 tracking-tight">HEALTH/HEALTH</span>
+      <div className="container mx-auto px-4 md:px-6 flex justify-between items-center">
+        <div className="flex items-center">
+          <Link href="/" className="flex items-center space-x-2">
+            <div className="w-9 h-9 bg-white clip-triangle flex justify-center items-center transform rotate-180 mr-2 relative">
+              <div className="w-[70%] h-[70%] absolute bg-repeat-y bg-[length:100%_10px] bg-[linear-gradient(to_bottom,#0f172a,#0f172a_2px,transparent_2px,transparent_8px)]"></div>
+            </div>
+            <span className="font-primary font-bold text-xl tracking-wider text-transparent bg-clip-text bg-gradient-to-r from-brand-primary via-brand-secondary to-purple-500 hover:opacity-90 transition-opacity">
+              HEALTH/HEALTH
+            </span>
           </Link>
-
-          {/* Container Microsoft agora vem antes do CTA */}
-          <div className="hidden md:flex items-center gap-2 bg-gradient-to-r from-white/70 to-gray-50/90 border border-gray-200/80 rounded-md px-3 py-2 shadow-sm">
-            <span className="text-xs font-semibold text-gray-600">Member</span>
-            <Image
-              src="/microsoft-logo.png"
-              alt="Microsoft for Startups Founders Hub"
-              width={20}
-              height={20}
-              className="h-5 w-auto transition-transform duration-300 hover:scale-110"
-            />
-            <span className="text-xs text-gray-700 hidden md:inline">Microsoft for Startups Founders Hub</span>
-          </div>
-
-          {/* Desktop CTA Button */}
-          <div className="hidden md:flex items-center space-x-1">
-            <button
-              className="px-5 py-2 rounded-md bg-gradient-to-r from-blue-500 to-cyan-500 text-white font-semibold shadow-md hover:from-blue-600 hover:to-cyan-600 transition-colors duration-300"
-              onClick={() => {/* ação do upload aqui */}}
-            >
-              Upload your record and see it
-            </button>
-          </div>
-
-          <div className="flex items-center gap-4">
-            <LanguageToggle />
-
-            {/* Mobile Menu Button */}
-            <button
-              className="md:hidden p-2 text-gray-700 hover:text-cyan-600 transition-colors"
-              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              aria-label={mobileMenuOpen ? "Close menu" : "Open menu"}
-            >
-              {mobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
-            </button>
-          </div>
         </div>
-      </div>
 
-      {/* Mobile Navigation Menu */}
-      <div
-        className={`md:hidden absolute w-full bg-white/98 backdrop-blur-sm shadow-md transition-all duration-300 overflow-hidden ${
-          mobileMenuOpen ? "max-h-[400px] border-b border-gray-100" : "max-h-0"
-        }`}
-      >
-        {/* No CTA on mobile */}
+        {/* Desktop Navigation - Only for desktop */}
+        <nav className="hidden md:flex items-center space-x-1 lg:space-x-2">
+          <button
+            onClick={() => {
+              scrollToSection("home")
+              setActiveSection("home")
+            }}
+            className={`px-3 py-2 text-sm font-medium relative rounded-md hover:bg-accent ${
+              activeSection === "home" ? "text-brand-primary" : "text-muted-foreground hover:text-brand-primary"
+            }`}
+          >
+            <span className="relative after:content-[''] after:absolute after:left-0 after:bottom-[-4px] after:w-0 after:h-0.5 after:bg-brand-primary after:transition-all after:duration-300 hover:after:w-full">
+              Home
+            </span>
+          </button>
+          <button
+            onClick={() => {
+              scrollToSection("about")
+              setActiveSection("about")
+            }}
+            className={`px-3 py-2 text-sm font-medium relative rounded-md hover:bg-accent ${
+              activeSection === "about" ? "text-brand-primary" : "text-muted-foreground hover:text-brand-primary"
+            }`}
+          >
+            <span className="relative after:content-[''] after:absolute after:left-0 after:bottom-[-4px] after:w-0 after:h-0.5 after:bg-brand-primary after:transition-all after:duration-300 hover:after:w-full">
+              Sobre
+            </span>
+          </button>
+          <button
+            onClick={() => {
+              scrollToSection("approach")
+              setActiveSection("approach")
+            }}
+            className={`px-3 py-2 text-sm font-medium relative rounded-md hover:bg-accent ${
+              activeSection === "approach" ? "text-brand-primary" : "text-muted-foreground hover:text-brand-primary"
+            }`}
+          >
+            <span className="relative after:content-[''] after:absolute after:left-0 after:bottom-[-4px] after:w-0 after:h-0.5 after:bg-brand-primary after:transition-all after:duration-300 hover:after:w-full">
+              Abordagem
+            </span>
+          </button>
+          <button
+            onClick={() => {
+              scrollToSection("benefits")
+              setActiveSection("benefits")
+            }}
+            className={`px-3 py-2 text-sm font-medium relative rounded-md hover:bg-accent ${
+              activeSection === "benefits" ? "text-brand-primary" : "text-muted-foreground hover:text-brand-primary"
+            }`}
+          >
+            <span className="relative after:content-[''] after:absolute after:left-0 after:bottom-[-4px] after:w-0 after:h-0.5 after:bg-brand-primary after:transition-all after:duration-300 hover:after:w-full">
+              Benefícios
+            </span>
+          </button>
+          <button
+            onClick={() => {
+              scrollToSection("contact")
+              setActiveSection("contact")
+            }}
+            className={`px-3 py-2 text-sm font-medium relative rounded-md hover:bg-accent ${
+              activeSection === "contact" ? "text-brand-primary" : "text-muted-foreground hover:text-brand-primary"
+            }`}
+          >
+            <span className="relative after:content-[''] after:absolute after:left-0 after:bottom-[-4px] after:w-0 after:h-0.5 after:bg-brand-primary after:transition-all after:duration-300 hover:after:w-full">
+              Contato
+            </span>
+          </button>
+          <div className="ml-2 flex items-center space-x-2">
+            <LanguageSwitcher />
+            <ThemeToggle />
+          </div>
+        </nav>
       </div>
     </header>
   )
