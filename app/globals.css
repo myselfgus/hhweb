@@ -75,7 +75,7 @@
 
 /* Hero section fix for mobile devices */
 .hero-section {
-  min-height: 100vh;
+  min-height: 60vh;
   padding-top: 8rem;
   margin-bottom: 2rem;
 }
