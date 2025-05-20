@@ -11,7 +11,7 @@
   --font-heading: "Space Grotesk", system-ui, sans-serif;
   --font-body: "Manrope", system-ui, sans-serif;
   
-  /* Gradient background variables - optimized color set */
+  /* Gradient background variables */
   --color-bg1: rgb(108, 0, 162);
   --color-bg2: rgb(0, 17, 82);
   --color1: 18, 113, 255;
@@ -22,8 +22,8 @@
   --circle-size: 80%;
   --blending: hard-light;
   
-  /* Banner height */
-  --banner-height: 0px;
+  /* Banner height - CORRIGIDO */
+  --banner-height: 80px;
 }
 
 html {
@@ -33,10 +33,11 @@ html {
 body {
   color: rgb(var(--foreground-rgb));
   background: linear-gradient(to bottom, rgb(var(--background-start-rgb)), rgb(var(--background-end-rgb)));
+  font-family: var(--font-body);
   overflow-x: hidden;
 }
 
-/* Glass effect para elementos */
+/* Glass effect */
 .glass {
   @apply bg-blue-900/20 backdrop-blur-lg border border-blue-800/50;
   box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
@@ -49,7 +50,6 @@ body {
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
 }
 
-/* Enhanced glass effects */
 .glass-hover {
   @apply transition-all duration-300;
 }
@@ -64,6 +64,61 @@ body {
 
 .glass-secondary {
   @apply bg-purple-900/20 backdrop-blur-lg border border-purple-800/50;
+}
+
+/* Background patterns */
+.bg-grid {
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32' width='32' height='32' fill='none' stroke='%233b82f680'%3e%3cpath d='M0 .5H31.5V32'/%3e%3c/svg%3e");
+}
+
+.bg-grid-dense {
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' width='16' height='16' fill='none' stroke='%233b82f680'%3e%3cpath d='M0 .5H15.5V16'/%3e%3c/svg%3e");
+}
+
+.bg-dots {
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32' width='32' height='32' fill='%233b82f620'%3e%3ccircle cx='4' cy='4' r='2'/%3e%3c/svg%3e");
+}
+
+/* Fluid animation */
+@keyframes fluid-move {
+  0% {
+    transform: translate(-50%, -50%) rotate(0deg);
+  }
+  100% {
+    transform: translate(-50%, -50%) rotate(360deg);
+  }
+}
+
+.fluid-bg::after {
+  content: "";
+  position: absolute;
+  width: 200%;
+  height: 200%;
+  left: 50%;
+  top: 50%;
+  background: conic-gradient(from 180deg at 50% 50%, #06b6d4 0deg, #3b82f6 120deg, #6366f1 240deg, #06b6d4 360deg);
+  animation: fluid-move 20s linear infinite;
+  opacity: 0.6;
+  z-index: -1;
+}
+
+/* Container */
+.container {
+  @apply mx-auto max-w-7xl px-4 sm:px-6 lg:px-8;
+}
+
+/* Hero section - CORRIGIDO */
+.hero-section {
+  min-height: 90vh;
+  padding-top: calc(var(--banner-height) + 4rem);
+  margin-bottom: 2rem;
+}
+
+@media (min-width: 768px) {
+  .hero-section {
+    padding-top: calc(var(--banner-height) + 5rem);
+    margin-bottom: 0;
+  }
 }
 
 @media (max-width: 768px) {
@@ -82,18 +137,17 @@ body {
   }
 }
 
-/* Animações mais suaves para componentes interativos */
+/* Interactivity */
 button, a {
   transition: all 0.2s ease-in-out;
 }
 
-/* Melhorias de acessibilidade para foco */
 button:focus, a:focus, input:focus, textarea:focus {
   outline: 2px solid rgba(14, 165, 233, 0.5);
   outline-offset: 2px;
 }
 
-/* Estilização personalizada para barras de rolagem */
+/* Scrollbar */
 ::-webkit-scrollbar {
   width: 8px;
   height: 8px;
@@ -112,7 +166,7 @@ button:focus, a:focus, input:focus, textarea:focus {
   background: rgba(14, 165, 233, 0.7);
 }
 
-/* Melhorias visuais para mobile */
+/* Mobile adjustments */
 @media (max-width: 640px) {
   h1 {
     font-size: 2.5rem !important;
@@ -131,6 +185,7 @@ button:focus, a:focus, input:focus, textarea:focus {
   }
 }
 
+/* Layout utilities */
 .viewport-fixed-wrapper {
   width: 100vw;
   max-width: 100%;
@@ -138,8 +193,15 @@ button:focus, a:focus, input:focus, textarea:focus {
   position: relative;
 }
 
-/* Optimized Gradient Background Animation */
-/* Reduced number of keyframes for better performance */
+.fixed-viewport {
+  position: fixed;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+/* Gradient animations - OTIMIZADAS */
 @keyframes moveInCircle {
   0% {
     transform: rotate(0deg);
@@ -151,19 +213,19 @@ button:focus, a:focus, input:focus, textarea:focus {
 
 @keyframes moveVertical {
   0% {
-    transform: translateY(-50%);
+    transform: translateY(-25%);
   }
   100% {
-    transform: translateY(50%);
+    transform: translateY(25%);
   }
 }
 
 @keyframes moveHorizontal {
   0% {
-    transform: translateX(-50%);
+    transform: translateX(-25%);
   }
   100% {
-    transform: translateX(50%);
+    transform: translateX(25%);
   }
 }
 
@@ -175,7 +237,6 @@ button:focus, a:focus, input:focus, textarea:focus {
   background: linear-gradient(40deg, var(--color-bg1), var(--color-bg2));
   top: 0;
   left: 0;
-  will-change: transform; /* Hint for browser optimization */
 }
 
 .gradient-bg svg {
@@ -187,13 +248,12 @@ button:focus, a:focus, input:focus, textarea:focus {
 }
 
 .gradient-bg .gradients-container {
-  filter: url(#goo) blur(40px);
+  filter: url(#goo) blur(15px);
   width: 100%;
   height: 100%;
-  will-change: transform; /* Hint for browser optimization */
 }
 
-/* Gradient elements with enhanced animations */
+/* Gradients - OTIMIZADOS */
 .gradient-bg .g1 {
   position: absolute;
   background: radial-gradient(circle at center, rgba(var(--color1), 0.8) 0, rgba(var(--color1), 0) 50%) no-repeat;
@@ -203,9 +263,8 @@ button:focus, a:focus, input:focus, textarea:focus {
   top: calc(50% - var(--circle-size) / 2);
   left: calc(50% - var(--circle-size) / 2);
   transform-origin: center center;
-  animation: moveVertical 18s ease-in-out infinite alternate;
-  opacity: 1;
-  will-change: transform; /* Hint for browser optimization */
+  animation: moveVertical 30s ease-in-out infinite alternate;
+  opacity: 0.7;
 }
 
 .gradient-bg .g2 {
@@ -217,49 +276,76 @@ button:focus, a:focus, input:focus, textarea:focus {
   top: calc(50% - var(--circle-size) / 2);
   left: calc(50% - var(--circle-size) / 2);
   transform-origin: calc(50% - 400px);
-  animation: moveInCircle 20s linear infinite;
-  opacity: 1;
-  will-change: transform; /* Hint for browser optimization */
+  animation: moveInCircle 40s linear infinite;
+  opacity: 0.6;
 }
 
 .gradient-bg .g3 {
   position: absolute;
-  background: radial-gradient(circle at center, rgba(var(--color3), 0.8) 0, rgba(var(--color3), 0) 50%) no-repeat;
+  background: radial-gradient(circle at center, rgba(var(--color3), 0.7) 0, rgba(var(--color3), 0) 50%) no-repeat;
   mix-blend-mode: var(--blending);
   width: var(--circle-size);
   height: var(--circle-size);
   top: calc(50% - var(--circle-size) / 2);
   left: calc(50% - var(--circle-size) / 2);
   transform-origin: calc(50% + 200px);
-  animation: moveInCircle 25s linear infinite reverse;
-  opacity: 0.7;
-  will-change: transform; /* Hint for browser optimization */
+  animation: moveInCircle 30s linear infinite reverse;
+  opacity: 0.5;
 }
 
 .gradient-bg .g4 {
   position: absolute;
-  background: radial-gradient(circle at center, rgba(var(--color4), 0.8) 0, rgba(var(--color4), 0) 50%) no-repeat;
+  background: radial-gradient(circle at center, rgba(var(--color4), 0.7) 0, rgba(var(--color4), 0) 50%) no-repeat;
   mix-blend-mode: var(--blending);
   width: var(--circle-size);
   height: var(--circle-size);
   top: calc(50% - var(--circle-size) / 2);
   left: calc(50% - var(--circle-size) / 2);
   transform-origin: calc(50% - 200px);
-  animation: moveHorizontal 22s ease-in-out infinite alternate;
-  opacity: 0.8;
-  will-change: transform; /* Hint for browser optimization */
+  animation: moveHorizontal 30s ease-in-out infinite alternate;
+  opacity: 0.5;
 }
 
 .gradient-bg .g5 {
   position: absolute;
-  background: radial-gradient(circle at center, rgba(var(--color5), 0.8) 0, rgba(var(--color5), 0) 50%) no-repeat;
+  background: radial-gradient(circle at center, rgba(var(--color5), 0.7) 0, rgba(var(--color5), 0) 50%) no-repeat;
   mix-blend-mode: var(--blending);
-  width: calc(var(--circle-size) * 2);
-  height: calc(var(--circle-size) * 2);
-  top: calc(50% - var(--circle-size));
-  left: calc(50% - var(--circle-size));
+  width: calc(var(--circle-size) * 1.5);
+  height: calc(var(--circle-size) * 1.5);
+  top: calc(50% - var(--circle-size) * 0.75);
+  left: calc(50% - var(--circle-size) * 0.75);
   transform-origin: calc(50% - 800px) calc(50% + 200px);
-  animation: moveInCircle 22s ease-in-out infinite;
-  opacity: 1;
-  will-change: transform; /* Hint for browser optimization */
+  animation: moveInCircle 40s ease-in-out infinite;
+  opacity: 0.5;
+}
+
+/* Media queries para desktop vs mobile */
+@media (min-width: 1024px) {
+  .gradient-bg .gradients-container {
+    filter: url(#goo) blur(10px);
+  }
+  
+  /* Pausar animações no desktop */
+  .gradient-bg .g1,
+  .gradient-bg .g2,
+  .gradient-bg .g3,
+  .gradient-bg .g4,
+  .gradient-bg .g5 {
+    animation-play-state: paused;
+  }
+}
+
+/* Otimizações mobile */
+@media (max-width: 1023px) {
+  .gradient-bg .gradients-container {
+    filter: url(#goo) blur(15px);
+  }
+  
+  .gradient-bg .g1,
+  .gradient-bg .g2,
+  .gradient-bg .g3,
+  .gradient-bg .g4,
+  .gradient-bg .g5 {
+    animation-play-state: running;
+  }
 }
