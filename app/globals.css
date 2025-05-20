@@ -75,8 +75,8 @@
 
 /* Hero section fix for mobile devices */
 .hero-section {
-  min-height: 60vh;
-  padding-top: 8rem;
+  min-height: 100vh;
+  padding-top: calc(var(--banner-height) + 8rem);
   margin-bottom: 2rem;
 }
 
