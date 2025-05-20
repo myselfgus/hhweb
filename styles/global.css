@@ -201,7 +201,7 @@ button:focus, a:focus, input:focus, textarea:focus {
   pointer-events: none;
 }
 
-/* Gradient animations - OTIMIZADAS */
+/* ANIMAÇÕES - CONFIGURAÇÕES DE MOBILE APLICADAS GLOBALMENTE */
 @keyframes moveInCircle {
   0% {
     transform: rotate(0deg);
@@ -213,19 +213,19 @@ button:focus, a:focus, input:focus, textarea:focus {
 
 @keyframes moveVertical {
   0% {
-    transform: translateY(-25%);
+    transform: translateY(-50%);
   }
   100% {
-    transform: translateY(25%);
+    transform: translateY(50%);
   }
 }
 
 @keyframes moveHorizontal {
   0% {
-    transform: translateX(-25%);
+    transform: translateX(-50%);
   }
   100% {
-    transform: translateX(25%);
+    transform: translateX(50%);
   }
 }
 
@@ -247,13 +247,14 @@ button:focus, a:focus, input:focus, textarea:focus {
   height: 0;
 }
 
+/* CONFIGURAÇÃO DE BLUR MAIS LEVE (IGUAL MOBILE) */
 .gradient-bg .gradients-container {
-  filter: url(#goo) blur(15px);
+  filter: url(#goo) blur(20px);
   width: 100%;
   height: 100%;
 }
 
-/* Gradients - OTIMIZADOS */
+/* Gradientes - CONFIGURAÇÃO DE MOBILE PARA TODOS */
 .gradient-bg .g1 {
   position: absolute;
   background: radial-gradient(circle at center, rgba(var(--color1), 0.8) 0, rgba(var(--color1), 0) 50%) no-repeat;
@@ -263,8 +264,8 @@ button:focus, a:focus, input:focus, textarea:focus {
   top: calc(50% - var(--circle-size) / 2);
   left: calc(50% - var(--circle-size) / 2);
   transform-origin: center center;
-  animation: moveVertical 30s ease-in-out infinite alternate;
-  opacity: 0.7;
+  animation: moveVertical 18s ease-in-out infinite alternate;
+  opacity: 1;
 }
 
 .gradient-bg .g2 {
@@ -276,76 +277,63 @@ button:focus, a:focus, input:focus, textarea:focus {
   top: calc(50% - var(--circle-size) / 2);
   left: calc(50% - var(--circle-size) / 2);
   transform-origin: calc(50% - 400px);
-  animation: moveInCircle 40s linear infinite;
-  opacity: 0.6;
+  animation: moveInCircle 20s linear infinite;
+  opacity: 1;
 }
 
 .gradient-bg .g3 {
   position: absolute;
-  background: radial-gradient(circle at center, rgba(var(--color3), 0.7) 0, rgba(var(--color3), 0) 50%) no-repeat;
+  background: radial-gradient(circle at center, rgba(var(--color3), 0.8) 0, rgba(var(--color3), 0) 50%) no-repeat;
   mix-blend-mode: var(--blending);
   width: var(--circle-size);
   height: var(--circle-size);
   top: calc(50% - var(--circle-size) / 2);
   left: calc(50% - var(--circle-size) / 2);
   transform-origin: calc(50% + 200px);
-  animation: moveInCircle 30s linear infinite reverse;
-  opacity: 0.5;
+  animation: moveInCircle 25s linear infinite reverse;
+  opacity: 0.7;
 }
 
 .gradient-bg .g4 {
   position: absolute;
-  background: radial-gradient(circle at center, rgba(var(--color4), 0.7) 0, rgba(var(--color4), 0) 50%) no-repeat;
+  background: radial-gradient(circle at center, rgba(var(--color4), 0.8) 0, rgba(var(--color4), 0) 50%) no-repeat;
   mix-blend-mode: var(--blending);
   width: var(--circle-size);
   height: var(--circle-size);
   top: calc(50% - var(--circle-size) / 2);
   left: calc(50% - var(--circle-size) / 2);
   transform-origin: calc(50% - 200px);
-  animation: moveHorizontal 30s ease-in-out infinite alternate;
-  opacity: 0.5;
+  animation: moveHorizontal 22s ease-in-out infinite alternate;
+  opacity: 0.8;
 }
 
 .gradient-bg .g5 {
   position: absolute;
-  background: radial-gradient(circle at center, rgba(var(--color5), 0.7) 0, rgba(var(--color5), 0) 50%) no-repeat;
+  background: radial-gradient(circle at center, rgba(var(--color5), 0.8) 0, rgba(var(--color5), 0) 50%) no-repeat;
   mix-blend-mode: var(--blending);
-  width: calc(var(--circle-size) * 1.5);
-  height: calc(var(--circle-size) * 1.5);
-  top: calc(50% - var(--circle-size) * 0.75);
-  left: calc(50% - var(--circle-size) * 0.75);
+  width: calc(var(--circle-size) * 2);
+  height: calc(var(--circle-size) * 2);
+  top: calc(50% - var(--circle-size));
+  left: calc(50% - var(--circle-size));
   transform-origin: calc(50% - 800px) calc(50% + 200px);
-  animation: moveInCircle 40s ease-in-out infinite;
-  opacity: 0.5;
+  animation: moveInCircle 22s ease-in-out infinite;
+  opacity: 1;
 }
 
-/* Media queries para desktop vs mobile */
-@media (min-width: 1024px) {
-  .gradient-bg .gradients-container {
-    filter: url(#goo) blur(10px);
-  }
-  
-  /* Pausar animações no desktop */
-  .gradient-bg .g1,
-  .gradient-bg .g2,
-  .gradient-bg .g3,
-  .gradient-bg .g4,
-  .gradient-bg .g5 {
-    animation-play-state: paused;
-  }
+/* REMOVER WILL-CHANGE PARA EVITAR PROBLEMAS DE PERFORMANCE */
+.gradient-bg,
+.gradient-bg .gradients-container,
+.gradient-bg .g1,
+.gradient-bg .g2,
+.gradient-bg .g3,
+.gradient-bg .g4,
+.gradient-bg .g5 {
+  will-change: auto;
 }
 
-/* Otimizações mobile */
-@media (max-width: 1023px) {
+/* EM DISPOSITIVOS COM TELA MENOR QUE 768px, REDUZIR AINDA MAIS O BLUR */
+@media (max-width: 768px) {
   .gradient-bg .gradients-container {
     filter: url(#goo) blur(15px);
-  }
-  
-  .gradient-bg .g1,
-  .gradient-bg .g2,
-  .gradient-bg .g3,
-  .gradient-bg .g4,
-  .gradient-bg .g5 {
-    animation-play-state: running;
   }
 }
