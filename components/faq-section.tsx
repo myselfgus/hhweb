@@ -1,98 +1,93 @@
 "use client"
 
 import { useState } from "react"
-import { motion, AnimatePresence } from "framer-motion"
 import { ChevronDown } from "lucide-react"
-import { useScrollAnimation } from "@/hooks/use-scroll-animation"
+import { motion, AnimatePresence } from "framer-motion"
 
-type FAQItem = {
+interface FAQItem {
   question: string
   answer: string
 }
 
-const faqs: FAQItem[] = [
-  {
-    question: "O que é a abordagem dimensional da HEALTH/HEALTH?",
-    answer:
-      "Nossa abordagem dimensional posiciona a experiência mental em um espaço vetorial contínuo de 10 dimensões fundamentais, superando as limitações dos sistemas categoriais tradicionais que dividem a experiência em 'transtornos' discretos.",
-  },
-  {
-    question: "Como a visualização dimensional beneficia os pacientes?",
-    answer:
-      "As visualizações dimensionais facilitam a compreensão da experiência pessoal, reduzem o estigma através da despatologização, promovem maior autonomia no processo terapêutico e reconhecem a singularidade da experiência individual além das categorias diagnósticas genéricas.",
-  },
-  {
-    question: "Quais são as bases científicas do framework HEALTH/HEALTH?",
-    answer:
-      "Nosso framework fundamenta-se no materialismo existencial, integrando neurociência contemporânea, fenomenologia da experiência vivida e ciência de sistemas dinâmicos para criar uma abordagem cientificamente rigorosa e humanisticamente significativa.",
-  },
-  {
-    question: "Como posso implementar esta abordagem na minha prática clínica?",
-    answer:
-      "Oferecemos treinamento, suporte técnico e ferramentas de visualização que podem ser integradas à sua prática. Entre em contato conosco para uma avaliação inicial, demonstração personalizada e plano de implementação adaptado às suas necessidades específicas.",
-  },
-  {
-    question: "A HEALTH/HEALTH oferece parcerias para pesquisadores?",
-    answer:
-      "Sim, buscamos ativamente parcerias com pesquisadores interessados em explorar nosso framework dimensional. Oferecemos acesso a dados dimensionais quantitativos, ferramentas para análise trajetorial e suporte para desenvolvimento de intervenções personalizadas baseadas em perfis dimensionais.",
-  },
-]
-
-export default function FAQSection() {
+export function FAQSection() {
   const [openIndex, setOpenIndex] = useState<number | null>(null)
-  const [sectionRef, sectionInView] = useScrollAnimation()
 
   const toggleFAQ = (index: number) => {
     setOpenIndex(openIndex === index ? null : index)
   }
 
-  return (
-    <section id="faq" className="section bg-white" ref={sectionRef}>
-      <div className="section-container">
-        <motion.div
-          className="section-header"
-          initial={{ opacity: 0, y: 50 }}
-          animate={sectionInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.6 }}
-        >
-          <h2>Perguntas Frequentes</h2>
-          <div className="section-divider"></div>
-        </motion.div>
+  const faqItems: FAQItem[] = [
+    {
+      question: "Como funciona a tecnologia de documentação automática?",
+      answer:
+        "Estamos desenvolvendo um sistema que utiliza processamento de linguagem natural avançado para capturar, transcrever e estruturar conversas clínicas em tempo real, transformando-as em documentação médica estruturada sem intervenção manual.",
+    },
+    {
+      question: "Como a privacidade dos dados é garantida?",
+      answer:
+        "A privacidade é um princípio fundamental. Estamos projetando nossa tecnologia com criptografia de ponta a ponta e seguindo os mais rigorosos padrões de segurança. Todos os dados são processados com consentimento explícito e em conformidade com regulamentações como LGPD e HIPAA.",
+    },
+    {
+      question: "Qual é o estágio atual de desenvolvimento?",
+      answer:
+        "Atualmente estamos em fase de pesquisa e desenvolvimento, trabalhando em protótipos iniciais e validando conceitos. Estamos colaborando com especialistas em saúde mental para garantir que nossa abordagem seja clinicamente relevante e eticamente responsável.",
+    },
+    {
+      question: "Como posso acompanhar o desenvolvimento ou colaborar?",
+      answer:
+        "Estamos abertos a parcerias com profissionais de saúde, pesquisadores e instituições interessadas em explorar o futuro da documentação clínica. Entre em contato conosco para discutir possíveis colaborações ou para receber atualizações sobre nosso progresso.",
+    },
+    {
+      question: "Qual é a visão de longo prazo do projeto?",
+      answer:
+        "Nossa visão é transformar fundamentalmente a prática clínica, permitindo que profissionais de saúde dediquem 100% de sua atenção aos pacientes, enquanto a tecnologia cuida da documentação. Acreditamos que isso pode melhorar significativamente a qualidade do cuidado e os resultados terapêuticos.",
+    },
+  ]
 
-        <div className="max-w-3xl mx-auto">
-          {faqs.map((faq, index) => (
+  return (
+    <section className="bg-slate-950 py-24">
+      <div className="w-full px-4">
+        <h2 className="mb-16 text-center text-4xl font-bold text-white">Perguntas Frequentes</h2>
+
+        <div className="mx-auto max-w-3xl space-y-6">
+          {faqItems.map((item, i) => (
             <motion.div
-              key={index}
-              className="mb-4 border-b border-gray-light pb-2"
+              key={i}
+              className="glass rounded-xl border border-white/10 overflow-hidden"
               initial={{ opacity: 0, y: 20 }}
-              animate={sectionInView ? { opacity: 1, y: 0 } : {}}
-              transition={{ duration: 0.4, delay: 0.2 + index * 0.1 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: i * 0.1 }}
             >
-              <button
-                className="w-full flex justify-between items-center py-4 text-left focus:outline-none"
-                onClick={() => toggleFAQ(index)}
-                aria-expanded={openIndex === index}
-                aria-controls={`faq-answer-${index}`}
+              <div
+                className="flex cursor-pointer justify-between items-center p-6"
+                onClick={() => toggleFAQ(i)}
+                role="button"
+                tabIndex={0}
+                aria-expanded={openIndex === i}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter" || e.key === " ") {
+                    toggleFAQ(i)
+                  }
+                }}
               >
-                <h3 className="text-xl font-medium mb-0">{faq.question}</h3>
-                <ChevronDown
-                  className={`w-5 h-5 text-emotional-light transition-transform ${
-                    openIndex === index ? "rotate-180" : ""
-                  }`}
-                />
-              </button>
+                <h3 className="text-lg font-semibold text-white">{item.question}</h3>
+                <motion.div animate={{ rotate: openIndex === i ? 180 : 0 }} transition={{ duration: 0.3 }}>
+                  <ChevronDown className="h-6 w-6 text-cyan-400" />
+                </motion.div>
+              </div>
 
               <AnimatePresence>
-                {openIndex === index && (
+                {openIndex === i && (
                   <motion.div
-                    id={`faq-answer-${index}`}
                     initial={{ height: 0, opacity: 0 }}
                     animate={{ height: "auto", opacity: 1 }}
                     exit={{ height: 0, opacity: 0 }}
                     transition={{ duration: 0.3 }}
-                    className="overflow-hidden"
                   >
-                    <p className="py-4 text-gray-medium">{faq.answer}</p>
+                    <div className="px-6 pb-6">
+                      <p className="text-blue-200">{item.answer}</p>
+                    </div>
                   </motion.div>
                 )}
               </AnimatePresence>

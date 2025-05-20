@@ -1,0 +1,265 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --foreground-rgb: 255, 255, 255;
+  --background-start-rgb: 10, 10, 40;
+  --background-end-rgb: 5, 5, 35;
+  
+  /* Font variables */
+  --font-heading: "Space Grotesk", system-ui, sans-serif;
+  --font-body: "Manrope", system-ui, sans-serif;
+  
+  /* Gradient background variables - optimized color set */
+  --color-bg1: rgb(108, 0, 162);
+  --color-bg2: rgb(0, 17, 82);
+  --color1: 18, 113, 255;
+  --color2: 221, 74, 255;
+  --color3: 100, 220, 255;
+  --color4: 180, 30, 200;
+  --color5: 180, 180, 50;
+  --circle-size: 80%;
+  --blending: hard-light;
+  
+  /* Banner height */
+  --banner-height: 0px;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  color: rgb(var(--foreground-rgb));
+  background: linear-gradient(to bottom, rgb(var(--background-start-rgb)), rgb(var(--background-end-rgb)));
+  overflow-x: hidden;
+}
+
+/* Glass effect para elementos */
+.glass {
+  @apply bg-blue-900/20 backdrop-blur-lg border border-blue-800/50;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+.glass-panel {
+  background: rgba(15, 23, 42, 0.4);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(8px);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+}
+
+/* Enhanced glass effects */
+.glass-hover {
+  @apply transition-all duration-300;
+}
+
+.glass-hover:hover {
+  @apply bg-blue-800/30 border-blue-700/70;
+}
+
+.glass-primary {
+  @apply bg-cyan-900/20 backdrop-blur-lg border border-cyan-800/50;
+}
+
+.glass-secondary {
+  @apply bg-purple-900/20 backdrop-blur-lg border border-purple-800/50;
+}
+
+@media (max-width: 768px) {
+  .responsive-container {
+    padding-left: 16px;
+    padding-right: 16px;
+  }
+  
+  .hero-section {
+    min-height: 85vh;
+    padding-top: calc(var(--banner-height) + 64px) !important;
+  }
+  
+  .grid-responsive {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+/* Animações mais suaves para componentes interativos */
+button, a {
+  transition: all 0.2s ease-in-out;
+}
+
+/* Melhorias de acessibilidade para foco */
+button:focus, a:focus, input:focus, textarea:focus {
+  outline: 2px solid rgba(14, 165, 233, 0.5);
+  outline-offset: 2px;
+}
+
+/* Estilização personalizada para barras de rolagem */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(15, 23, 42, 0.1);
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(14, 165, 233, 0.5);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(14, 165, 233, 0.7);
+}
+
+/* Melhorias visuais para mobile */
+@media (max-width: 640px) {
+  h1 {
+    font-size: 2.5rem !important;
+  }
+  
+  h2 {
+    font-size: 1.75rem !important;
+  }
+  
+  .mobile-padding {
+    padding: 0.75rem !important;
+  }
+  
+  .mobile-spacing {
+    margin-bottom: 2rem !important;
+  }
+}
+
+.viewport-fixed-wrapper {
+  width: 100vw;
+  max-width: 100%;
+  overflow-x: hidden;
+  position: relative;
+}
+
+/* Optimized Gradient Background Animation */
+/* Reduced number of keyframes for better performance */
+@keyframes moveInCircle {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes moveVertical {
+  0% {
+    transform: translateY(-50%);
+  }
+  100% {
+    transform: translateY(50%);
+  }
+}
+
+@keyframes moveHorizontal {
+  0% {
+    transform: translateX(-50%);
+  }
+  100% {
+    transform: translateX(50%);
+  }
+}
+
+.gradient-bg {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  overflow: hidden;
+  background: linear-gradient(40deg, var(--color-bg1), var(--color-bg2));
+  top: 0;
+  left: 0;
+  will-change: transform; /* Hint for browser optimization */
+}
+
+.gradient-bg svg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 0;
+  height: 0;
+}
+
+.gradient-bg .gradients-container {
+  filter: url(#goo) blur(40px);
+  width: 100%;
+  height: 100%;
+  will-change: transform; /* Hint for browser optimization */
+}
+
+/* Gradient elements with enhanced animations */
+.gradient-bg .g1 {
+  position: absolute;
+  background: radial-gradient(circle at center, rgba(var(--color1), 0.8) 0, rgba(var(--color1), 0) 50%) no-repeat;
+  mix-blend-mode: var(--blending);
+  width: var(--circle-size);
+  height: var(--circle-size);
+  top: calc(50% - var(--circle-size) / 2);
+  left: calc(50% - var(--circle-size) / 2);
+  transform-origin: center center;
+  animation: moveVertical 18s ease-in-out infinite alternate;
+  opacity: 1;
+  will-change: transform; /* Hint for browser optimization */
+}
+
+.gradient-bg .g2 {
+  position: absolute;
+  background: radial-gradient(circle at center, rgba(var(--color2), 0.8) 0, rgba(var(--color2), 0) 50%) no-repeat;
+  mix-blend-mode: var(--blending);
+  width: var(--circle-size);
+  height: var(--circle-size);
+  top: calc(50% - var(--circle-size) / 2);
+  left: calc(50% - var(--circle-size) / 2);
+  transform-origin: calc(50% - 400px);
+  animation: moveInCircle 20s linear infinite;
+  opacity: 1;
+  will-change: transform; /* Hint for browser optimization */
+}
+
+.gradient-bg .g3 {
+  position: absolute;
+  background: radial-gradient(circle at center, rgba(var(--color3), 0.8) 0, rgba(var(--color3), 0) 50%) no-repeat;
+  mix-blend-mode: var(--blending);
+  width: var(--circle-size);
+  height: var(--circle-size);
+  top: calc(50% - var(--circle-size) / 2);
+  left: calc(50% - var(--circle-size) / 2);
+  transform-origin: calc(50% + 200px);
+  animation: moveInCircle 25s linear infinite reverse;
+  opacity: 0.7;
+  will-change: transform; /* Hint for browser optimization */
+}
+
+.gradient-bg .g4 {
+  position: absolute;
+  background: radial-gradient(circle at center, rgba(var(--color4), 0.8) 0, rgba(var(--color4), 0) 50%) no-repeat;
+  mix-blend-mode: var(--blending);
+  width: var(--circle-size);
+  height: var(--circle-size);
+  top: calc(50% - var(--circle-size) / 2);
+  left: calc(50% - var(--circle-size) / 2);
+  transform-origin: calc(50% - 200px);
+  animation: moveHorizontal 22s ease-in-out infinite alternate;
+  opacity: 0.8;
+  will-change: transform; /* Hint for browser optimization */
+}
+
+.gradient-bg .g5 {
+  position: absolute;
+  background: radial-gradient(circle at center, rgba(var(--color5), 0.8) 0, rgba(var(--color5), 0) 50%) no-repeat;
+  mix-blend-mode: var(--blending);
+  width: calc(var(--circle-size) * 2);
+  height: calc(var(--circle-size) * 2);
+  top: calc(50% - var(--circle-size));
+  left: calc(50% - var(--circle-size));
+  transform-origin: calc(50% - 800px) calc(50% + 200px);
+  animation: moveInCircle 22s ease-in-out infinite;
+  opacity: 1;
+  will-change: transform; /* Hint for browser optimization */
+}

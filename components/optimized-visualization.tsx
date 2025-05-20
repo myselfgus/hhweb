@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from "react"
 import * as THREE from "three"
 import { useIsMobile } from "@/hooks/use-mobile"
 
-export default function OptimizedHeroVisualization() {
+export function OptimizedVisualization() {
   const mountRef = useRef<HTMLDivElement>(null)
   const [isLoaded, setIsLoaded] = useState(false)
   const isMobile = useIsMobile()
@@ -48,23 +48,47 @@ export default function OptimizedHeroVisualization() {
     gridHelper.position.y = -2
     scene.add(gridHelper)
 
-    // Create dimension axes representation
-    const createAxis = (color: number, dir: THREE.Vector3, length: number) => {
+    // Create dimension axes representation with labels
+    const createAxis = (color: number, dir: THREE.Vector3, length: number, label: string) => {
       const material = new THREE.LineBasicMaterial({ color })
       const geometry = new THREE.BufferGeometry().setFromPoints([
         new THREE.Vector3(0, 0, 0),
         dir.clone().multiplyScalar(length),
       ])
-      return new THREE.Line(geometry, material)
+      const line = new THREE.Line(geometry, material)
+      scene.add(line)
+
+      // Add axis label at the end
+      const labelPos = dir.clone().multiplyScalar(length * 1.1)
+
+      // Create canvas for label
+      const canvas = document.createElement("canvas")
+      canvas.width = 128
+      canvas.height = 64
+      const ctx = canvas.getContext("2d")
+      if (ctx) {
+        ctx.fillStyle = "#ffffff"
+        ctx.font = "bold 24px Arial"
+        ctx.textAlign = "center"
+        ctx.textBaseline = "middle"
+        ctx.fillText(label, 64, 32)
+
+        const texture = new THREE.CanvasTexture(canvas)
+        const labelMaterial = new THREE.SpriteMaterial({ map: texture })
+        const sprite = new THREE.Sprite(labelMaterial)
+        sprite.position.copy(labelPos)
+        sprite.scale.set(2, 1, 1)
+        scene.add(sprite)
+      }
+
+      return line
     }
 
     const axes = [
-      createAxis(0x3b82f6, new THREE.Vector3(1, 0, 0), 5), // Emotional (Blue)
-      createAxis(0x10b981, new THREE.Vector3(0, 1, 0), 5), // Cognitive (Green)
-      createAxis(0xec4899, new THREE.Vector3(0, 0, 1), 5), // Autonomy (Pink)
+      createAxis(0x3b82f6, new THREE.Vector3(1, 0, 0), 5, "Emocional"), // X axis - Blue
+      createAxis(0x10b981, new THREE.Vector3(0, 1, 0), 5, "Cognitivo"), // Y axis - Green
+      createAxis(0xec4899, new THREE.Vector3(0, 0, 1), 5, "Autonomia"), // Z axis - Pink
     ]
-
-    axes.forEach((axis) => scene.add(axis))
 
     // Create points with optimized count based on device
     const createPoints = (count: number, radius: number) => {
@@ -83,9 +107,9 @@ export default function OptimizedHeroVisualization() {
         // Color based on position (blend of axis colors)
         const normalized = new THREE.Vector3(x, y, z).normalize()
         color.setRGB(
-          0.3 + 0.7 * Math.abs(normalized.x), // Blue influence
-          0.3 + 0.7 * Math.abs(normalized.y), // Green influence
-          0.3 + 0.7 * Math.abs(normalized.z), // Pink influence
+          0.3 + 0.7 * Math.abs(normalized.x), // Blue influence (Emocional)
+          0.3 + 0.7 * Math.abs(normalized.y), // Green influence (Cognitivo)
+          0.3 + 0.7 * Math.abs(normalized.z), // Pink influence (Autonomia)
         )
 
         colors.push(color.r, color.g, color.b)
@@ -106,7 +130,7 @@ export default function OptimizedHeroVisualization() {
     }
 
     // Adjust point count based on device capability
-    const pointCount = 500
+    const pointCount = isMobile ? 300 : 500
     const statePoints = createPoints(pointCount, 8)
     scene.add(statePoints)
 
@@ -199,13 +223,13 @@ export default function OptimizedHeroVisualization() {
 
       renderer.dispose()
     }
-  }, [])
+  }, [isMobile])
 
   return (
-    <div className="absolute top-0 left-0 w-full h-full z-[1]" ref={mountRef}>
+    <div className="w-full h-full" ref={mountRef}>
       {!isLoaded && (
-        <div className="absolute inset-0 flex items-center justify-center bg-black">
-          <div className="w-12 h-12 border-4 border-emotional-light border-t-transparent rounded-full animate-spin"></div>
+        <div className="absolute inset-0 flex items-center justify-center bg-slate-900">
+          <div className="w-12 h-12 border-4 border-cyan-500 border-t-transparent rounded-full animate-spin"></div>
         </div>
       )}
     </div>
